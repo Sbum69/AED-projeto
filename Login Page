@@ -1,0 +1,53 @@
+import customtkinter as ctk
+
+
+app = ctk.CTk()
+
+app.title("PodSpot")
+app.geometry("430x700")
+
+# Frame de login
+
+frame_login = ctk.CTkFrame(master = app, width=410,height=680,fg_color="#191414",corner_radius=40)
+frame_login.pack(pady=10,padx=10)
+
+
+label_titulo = ctk.CTkLabel(frame_login,text="PodSpot",font=("Helvetica bold",24),text_color="white",)
+label_titulo.place(x=150,y=80)
+
+# Carregar o Logotipo
+
+
+
+username = ctk.CTkEntry(frame_login,placeholder_text=("Username..."),font=("Helvetica bold",10),width=300,corner_radius=30,fg_color="transparent",text_color="white")
+username.place(x=65,y=400)
+
+password = ctk.CTkEntry(frame_login,placeholder_text=("Password..."),show="*",width=300,corner_radius=30,fg_color="transparent",text_color="white")
+password.place(x=65,y=450)
+
+"""Função para abrir a pagina inicial da app."""
+
+def paginaInicial():
+    pagina_inicial = ctk.CTkToplevel(app)
+    pagina_inicial.geometry("430x700")
+    pagina_inicial.title("PodSpot")
+    pagina_inicial.configure(fg_color="#191414")
+
+    # Configurações da frame da Pagina inicial.
+    frame_paginaInicial = ctk.CTkFrame(master=pagina_inicial,width= 410,
+    height=680,fg_color="green",corner_radius=40)
+    frame_paginaInicial.pack(pady=10,padx=10,fill="both", expand=True)
+
+    font_label = ctk.CTkFont(family="Helvetica",size=20,weight="bold")
+
+    # Titulos / Textos
+
+    ctk.CTkLabel(frame_paginaInicial,text="Trending Right Now", font= font_label,text_color="white").place(x=10,y=80)
+    ctk.CTkLabel(frame_paginaInicial,text="Podcast mais ouvidos",font= font_label,text_color="white").place(x=10,y=300)
+
+btn_login = ctk.CTkButton(master=frame_login,text="Login",command=paginaInicial,fg_color="#1DB954",text_color="white")
+btn_login.place(x=140,y=570)
+
+
+
+app.mainloop() 
