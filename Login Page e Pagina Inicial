@@ -1,108 +1,75 @@
+# Pagina inicial com as tabs
+#===========================
 from PIL import Image
 import customtkinter as ctk
 import webbrowser
 
-#========================
-# Pagina de login
-#========================
+def pagina_inicial():
+    main_page = ctk.CTk()
+    main_page.title("PodSpot")
+    main_page.geometry("1024x700")
 
-app = ctk.CTk()
-app.title("PodSpot")
-app.geometry("430x700")
+    # Frame pricipal da janela inicial
+    frame_principal = ctk.CTkFrame(master=main_page,fg_color="#191414")
+    frame_principal.pack(fill="both",expand=True)
 
-# Frame de login
+    # Menu lateral de navegação
+    menu_lateral = ctk.CTkFrame(master=frame_principal,width=200,fg_color="#1DB954")
+    menu_lateral.pack(side="left",fill="y")
 
-frame_login = ctk.CTkFrame(master = app, width=410,height=680,fg_color="#191414",corner_radius=40)
-frame_login.pack(pady=10,padx=10)
+    # Icones para o Menu
+    icon_home = ctk.CTkImage(light_image=Image.open("home_icon.png"),size=(30,30))
+    icon_artists = ctk.CTkImage(light_image=Image.open("staricon.png"),size=(30,30))
+    icon_trending = ctk.CTkImage(light_image=Image.open("tredingicon.png"),size=(30,30))
+    icon_favorites = ctk.CTkImage(light_image=Image.open("favoritos.png"),size=(30,30))
 
+    # Tabs: Home,Estrelas, Trending, Favorites
+    tabview =ctk.CTkTabview(master=frame_principal,width=800,height=500,corner_radius=20)
+    tabview.pack(side="right",fill="both",expand=True,padx=10,pady=10)
 
-label_titulo = ctk.CTkLabel(frame_login,text="PodSpot",font=("Helvetica bold",24),text_color="white",)
-label_titulo.place(x=150,y=80)
+    tab_home = tabview.add("Home")
+    tab_estrelas = tabview.add("Estrelas")
+    tab_trending = tabview.add("Trending")
+    tab_favorites = tabview.add("Favoritos")
 
-# Carregar o Logotipo
-logotipo = ctk.CTkImage(dark_image=Image.open("Logo.png"),size=(250,250))
+    # Botões no menu lateral
+    btn_home = ctk.CTkButton(menu_lateral,text="Home",image=icon_home,compound="left",
+                            fg_color="#1DB954",command=lambda:tabview.set("Home"))
+    btn_home.pack(pady=20,padx=10,anchor="w")
 
-# Label do logotipo 
-label_logotipo = ctk.CTkLabel(master=frame_login,image=logotipo,text="")
-label_logotipo.place(x=85,y=150)
+    btn_estrelas = ctk.CTkButton(menu_lateral,text="Estrelas",image=icon_artists,compound="left",
+                                fg_color="#1DB954",command=lambda:tabview.set("Estrelas"))
+    btn_estrelas.pack(pady=20,padx=10,anchor="w")
 
+    btn_trending = ctk.CTkButton(menu_lateral,text="Trending",image=icon_trending,compound="left",
+                                fg_color="#1DB954",command=lambda:tabview.set("Trending"))
+    btn_trending.pack(pady=20,padx=10,anchor="w")
 
+    btn_favoritos = ctk.CTkButton(menu_lateral,text="Favoritos",image=icon_favorites,compound="left",
+                                fg_color="#1DB954",command=lambda:tabview.set("Favoritos"))
+    btn_favoritos.pack(pady=20,padx=10,anchor="w")
 
-username = ctk.CTkEntry(frame_login,placeholder_text=("Username..."),font=("Helvetica bold",10),width=300,corner_radius=30,fg_color="transparent",text_color="white")
-username.place(x=65,y=400)
+    # Conteudo da Tab Home
+    for i in range(6):
+        tab_home.grid_rowconfigure(i,weight=1)
 
-password = ctk.CTkEntry(frame_login,placeholder_text=("Password..."),show="*",width=300,corner_radius=30,fg_color="transparent",text_color="white")
-password.place(x=65,y=450)
+        for j in range(3):
+            tab_home.grid_columnconfigure(j,weight=1)
+            podcast = ctk.CTkButton(tab_home,text=f"Podcast{i*3+j+1}",width=200,height=150,fg_color="gray")
+            podcast.grid(row=i,column=j,padx=10,pady=10)
+    # Conteudo da Tab de Estrelas.
+    label_estrelas =ctk.CTkLabel(tab_estrelas,text="Estrelas",text_color="white",font=("Helvetica",20))
+    label_estrelas.pack(pady=20)
 
-#========================
-# Função para abrir a pagina inicial
-#========================
+    #Conteudo da Aba Trending
+    label_trending =ctk.CTkLabel(tab_trending,text="Trending",text_color="white",font=("Helvetica",20))
+    label_trending.pack(pady=20)
 
-def paginaInicial():
-    pagina_inicial = ctk.CTkToplevel(app)
-    pagina_inicial.geometry("430x700")
-    pagina_inicial.title("PodSpot")
-    pagina_inicial.configure(fg_color="#191414")
+    # Conteudo da Aba Favoritos
+    label_favoritos =ctk.CTkLabel(tab_favorites,text="Favoritos",text_color="white",font=("Helvetica",20))
+    label_favoritos.pack(pady=20)
 
-    # Configurações da frame da Pagina inicial.
-    Frame_inicial = ctk.CTkFrame(master=pagina_inicial,width=410,height=700,fg_color="#191414",corner_radius=40)
-    Frame_inicial.pack(pady=10,padx=10,fill="both",expand =True)
+    main_page.mainloop()
 
-    # Menu Lateral(navegação)
-    menu_lateral = ctk.CTkFrame(master=Frame_inicial,width=80,height=700,fg_color="#1DB954",corner_radius=20)
-    menu_lateral.place(x=0,y=0)
-
-    # Icones para os botões
-    icon_home = ctk.CTkImage(light_image=Image.open("home_icon.png"),size=(24,24))
-    icon_search =ctk.CTkImage(light_image=Image.open("search_icon.png"),size=(24,24))
-
-    # Botões do menu lateral
-    btn_search = ctk.CTkButton(menu_lateral,text="",image=icon_search,width=70,height=40,
-                             corner_radius=10,fg_color="#1DB954",hover_color="#14833B",command=None)
-    btn_search.pack(pady=20)
-
-    btn_home = ctk.CTkButton(menu_lateral,text="",image=icon_home,width=70,height=40,
-                             corner_radius=10,fg_color="#1DB954",hover_color="#14833B",command=None)
-    btn_home.pack(pady=20)
-
-    # Label de "Popular Podcasts"
-    label_popular = ctk.CTkLabel(master=Frame_inicial,text="Popular Podcasts",
-    font=ctk.CTkFont(family="Helvetica",size=15,weight="bold"),text_color="white")
-    
-    label_popular.place(x=100,y=20)
-    
-#========================
-# Função para abrir o links no browser 
-# quando o user clickar
-#========================
-
-    def browser(link):
-        webbrowser.open(link)
-
-    #Podcast1
-    Podcast1 = ctk.CTkImage(dark_image=Image.open("joerogan.png"),size=(100,100))
-    btn_podcast1 = ctk.CTkButton(master= Frame_inicial,image=Podcast1,text="",fg_color="transparent",
-                                command=lambda:browser("https://www.youtube.com/live/ycPr5-27vSI?si=MLe4_W3phP3aF-Cf"),width=50,height=100)
-    btn_podcast1.place(x=70,y=60)
-
-    # Podcast2
-    Podcast2 = ctk.CTkImage(dark_image=Image.open("chris.jpeg"),size=(100,100))
-    btn_podcast2 = ctk.CTkButton(master=Frame_inicial,image=Podcast2,text="",fg_color="transparent",
-                                command=lambda:browser("https://youtu.be/DLfWv_Ey27s?si=QjRKPoT2KF8WhXZh"),width=50,height=100)
-    btn_podcast2.place(x=185,y=60)
-        
-    # Podcast3
-    Podcast3 = ctk.CTkImage(dark_image=Image.open("peweecast.jpeg"),size=(100,100))
-    btn_podcast3 = ctk.CTkButton(master=Frame_inicial,image=Podcast3,text="",fg_color="transparent",
-                                command=lambda:browser("https://youtu.be/RmyzRnLZ2WE?si=Hwm9hKoSCJwTcRJH"),width=50,height=100)
-    btn_podcast3.place(x=300,y=60)
-
-    
-
-btn_login = ctk.CTkButton(master=frame_login,text="LOG IN",command=paginaInicial,fg_color="#1DB954",text_color="white")
-btn_login.place(x=140,y=570)
-
-
-
-app.mainloop() 
+pagina_inicial()
 
