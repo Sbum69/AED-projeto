@@ -49,14 +49,46 @@ def pagina_inicial():
                                 fg_color="#1DB954",command=lambda:tabview.set("Favoritos"))
     btn_favoritos.pack(pady=20,padx=10,anchor="w")
 
-    # Conteudo da Tab Home
-    for i in range(6):
-        tab_home.grid_rowconfigure(i,weight=1)
+    #==========================
+    # Scrollbar para a tab home
+    #==========================
+    scroll_frame = ctk.CTkScrollableFrame(master=tab_home,width=800,height=500)
+    scroll_frame.pack(fill="both",expand=True,padx=10,pady=10)
 
+    #======================================
+    # Adicionar imagens aos botões na grade
+    #======================================
+
+    dados_podcast = [{"image":"joerogan.png", "link":"https://www.youtube.com/live/ycPr5-27vSI?si=MLe4_W3phP3aF-Cf"},
+                    {"image":"peweecast.jpeg", "link":"https://youtu.be/RmyzRnLZ2WE?si=Yjtvme3ZIq_o8nXA"},
+                    {"image":"chris.jpeg", "link":"https://youtu.be/DLfWv_Ey27s?si=0TBI6EcvkQ8LurOp"},
+                    {"image":"flowpodcast.png", "link":"https://youtu.be/P3mX2WB6xhQ?si=2IBW3XTF6zGY3WsC"},
+                    {"image":"georgejanko.png", "link":"https://youtu.be/6t-l0Y_uj9k?si=xgFd4n79eK74BrWo"},
+                    {"image":"thediary.png", "link":"https://youtu.be/jyCJeglqCe4?si=VRQnhegJ0gvIzdZO"}]
+    
+    #=====================================
+    # Função para abrir os links no youtube
+    #======================================
+    def browser(link):
+        webbrowser.open(link)
+
+    for i in range(5):
         for j in range(3):
-            tab_home.grid_columnconfigure(j,weight=1)
-            podcast = ctk.CTkButton(tab_home,text=f"Podcast{i*3+j+1}",width=200,height=150,fg_color="gray")
-            podcast.grid(row=i,column=j,padx=10,pady=10)
+            idx = i*4+j
+            if idx < len(dados_podcast):
+                # Caregar a imagem do podcast
+                podcast_image = ctk.CTkImage(dark_image=Image.open(dados_podcast[idx]["image"]),size=(100,100))
+
+                #Criar botões com imagem
+
+                btn_podcast = ctk.CTkButton(master=scroll_frame,image=podcast_image,text=f"Podcast{idx+1}",
+                                            compound="top",fg_color="grey",width=200,height=150,command=lambda
+                                            link=dados_podcast[idx]["link"]:browser(link))
+                btn_podcast.grid(row=i,column=j,padx=10,pady=10)    
+
+   
+    
+    
     # Conteudo da Tab de Estrelas.
     label_estrelas =ctk.CTkLabel(tab_estrelas,text="Estrelas",text_color="white",font=("Helvetica",20))
     label_estrelas.pack(pady=20)
