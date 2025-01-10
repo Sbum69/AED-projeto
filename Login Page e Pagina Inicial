@@ -73,7 +73,7 @@ def pagina_inicial():
         webbrowser.open(link)
 
     for i in range(5):
-        for j in range(3):
+        for j in range(4):
             idx = i*4+j
             if idx < len(dados_podcast):
                 # Caregar a imagem do podcast
@@ -82,7 +82,7 @@ def pagina_inicial():
                 #Criar botões com imagem
 
                 btn_podcast = ctk.CTkButton(master=scroll_frame,image=podcast_image,text=f"Podcast{idx+1}",
-                                            compound="top",fg_color="grey",width=200,height=150,command=lambda
+                                            compound="top",fg_color="grey",width=150,height=100,command=lambda
                                             link=dados_podcast[idx]["link"]:browser(link))
                 btn_podcast.grid(row=i,column=j,padx=10,pady=10)    
 
