@@ -10,7 +10,7 @@ def pagina_inicial():
     main_page.geometry("1024x700")
 
     # Frame pricipal da janela inicial
-    frame_principal = ctk.CTkFrame(master=main_page,fg_color="#191414")
+    frame_principal = ctk.CTkFrame(master=main_page,fg_color="black")
     frame_principal.pack(fill="both",expand=True)
 
     # Menu lateral de navegação
@@ -52,7 +52,7 @@ def pagina_inicial():
     #==========================
     # Scrollbar para a tab home
     #==========================
-    scroll_frame = ctk.CTkScrollableFrame(master=tab_home,width=800,height=500)
+    scroll_frame = ctk.CTkScrollableFrame(master=tab_home,width=200,height=200)
     scroll_frame.pack(fill="both",expand=True,padx=10,pady=10)
 
     #======================================
@@ -64,7 +64,17 @@ def pagina_inicial():
                     {"image":"chris.jpeg", "link":"https://youtu.be/DLfWv_Ey27s?si=0TBI6EcvkQ8LurOp"},
                     {"image":"flowpodcast.png", "link":"https://youtu.be/P3mX2WB6xhQ?si=2IBW3XTF6zGY3WsC"},
                     {"image":"georgejanko.png", "link":"https://youtu.be/6t-l0Y_uj9k?si=xgFd4n79eK74BrWo"},
-                    {"image":"thediary.png", "link":"https://youtu.be/jyCJeglqCe4?si=VRQnhegJ0gvIzdZO"}]
+                    {"image":"thediary.png", "link":"https://youtu.be/jyCJeglqCe4?si=VRQnhegJ0gvIzdZO"},
+                    {"image":"inteligencia.png","link":"https://youtu.be/3tsHfsk1o2I?si=uc_FvbVbjLAf4IiY"},
+                    {"image":"shanon.png","link":"https://youtu.be/JYL0blfer6M?si=sDptY0eD5wqZru8N"},
+                    {"image":"lexfridman.png","link":"https://youtu.be/Kbk9BiPhm7o?si=sbSQMd_V55QC_Bw3"},
+                    {"image":"pedro.png","link":"https://youtu.be/__bj2A4Ou5Q?si=tJQEWamDkewVsgPe"},
+                    {"image":"joerogan2.png","link":"https://youtu.be/HwyAX69xG1Q?si=R6qj_XnOkP4qkx8p"},
+                    {"image":"flagrant.png","link":"https://youtu.be/LHTwv56jZ7E?si=UaOYFLgfHMTFUYay"},
+                    {"image":"georgejanko2.png","link":"https://youtu.be/DND5JF9ioRw?si=fwY1pD2JBPZFKfvf"},
+                    {"image":"peweecast2.png","link":"https://youtu.be/WXFcWcqGx80?si=D7tu2CVB6a5vkOiY"},
+                    {"image":"shanon2.png","link":"https://youtu.be/8oRRZiRQxTs?si=NpFt07LtOV5UhJvk"},
+                    {"image":"flagrant2.png","link":"https://youtu.be/Ry1IjOft95c?si=lXJY35VtndhAuKDH"}]
     
     #=====================================
     # Função para abrir os links no youtube
@@ -72,12 +82,12 @@ def pagina_inicial():
     def browser(link):
         webbrowser.open(link)
 
-    for i in range(5):
+    for i in range(6):
         for j in range(4):
             idx = i*4+j
             if idx < len(dados_podcast):
                 # Caregar a imagem do podcast
-                podcast_image = ctk.CTkImage(dark_image=Image.open(dados_podcast[idx]["image"]),size=(100,100))
+                podcast_image = ctk.CTkImage(dark_image=Image.open(dados_podcast[idx]["image"]),size=(150,150))
 
                 #Criar botões com imagem
 
