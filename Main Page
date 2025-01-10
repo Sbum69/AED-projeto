@@ -10,7 +10,7 @@ def pagina_inicial():
     main_page.geometry("1024x700")
 
     # Frame pricipal da janela inicial
-    frame_principal = ctk.CTkFrame(master=main_page,fg_color="black")
+    frame_principal = ctk.CTkFrame(master=main_page,fg_color="green")
     frame_principal.pack(fill="both",expand=True)
 
     # Menu lateral de navegação
@@ -52,7 +52,7 @@ def pagina_inicial():
     #==========================
     # Scrollbar para a tab home
     #==========================
-    scroll_frame = ctk.CTkScrollableFrame(master=tab_home,width=200,height=200)
+    scroll_frame = ctk.CTkScrollableFrame(master=tab_home,width=200,height=200,fg_color="black")
     scroll_frame.pack(fill="both",expand=True,padx=10,pady=10)
 
     #======================================
@@ -81,7 +81,10 @@ def pagina_inicial():
     #======================================
     def browser(link):
         webbrowser.open(link)
-
+    
+    #========================================
+    # Loop para organizar as linhas e colunas
+    #========================================
     for i in range(6):
         for j in range(4):
             idx = i*4+j
@@ -92,7 +95,7 @@ def pagina_inicial():
                 #Criar botões com imagem
 
                 btn_podcast = ctk.CTkButton(master=scroll_frame,image=podcast_image,text=f"Podcast{idx+1}",
-                                            compound="top",fg_color="grey",width=150,height=100,command=lambda
+                                            compound="top",fg_color="green",width=150,height=100,command=lambda
                                             link=dados_podcast[idx]["link"]:browser(link))
                 btn_podcast.grid(row=i,column=j,padx=10,pady=10)    
 
@@ -100,8 +103,34 @@ def pagina_inicial():
     
     
     # Conteudo da Tab de Estrelas.
-    label_estrelas =ctk.CTkLabel(tab_estrelas,text="Estrelas",text_color="white",font=("Helvetica",20))
+    label_estrelas =ctk.CTkLabel(tab_estrelas,text="Estrelas",text_color="black",font=("Helvetica",20))
     label_estrelas.pack(pady=20)
+
+    frame_estrelas = ctk.CTkFrame(master=tab_estrelas,fg_color="green")
+    frame_estrelas.pack(fill="both",expand= True,padx=10,pady=10)
+
+    # Lista de estrelas
+    estrelas = [{"image":"joerogan.png","name":"Joe Rogan","link":"https://www.youtube.com/results?search_query=joe+rogan"},
+                {"image":"lexfridmanphoto.png","name":"Lex Fridman","link":"https://www.youtube.com/results?search_query=lex+fridman"},
+                {"image":"georgejanko.png","name":"George Janko","link":"https://www.youtube.com/results?search_query=george+janko"},
+                {"image":"chris.jpeg","name":"Chris Williamsom","link":"https://www.youtube.com/@ChrisWillx"},
+                {"image":"shanon.png","name":"Shanon Sharpe","link":"https://www.youtube.com/@ClubShayShay"}]
+    
+    # Função para abrir os links
+    def browser(link):
+        webbrowser.open(link)
+    
+    # Adicionar imagens e nomes das estrelas
+    for i, estrelas in enumerate(estrelas):
+        estrela_imagem = ctk.CTkImage(dark_image=Image.open(estrelas["image"]),size=(100,100))
+
+        # Botão com a imagem e nome da estrela
+        btn_estrela = ctk.CTkButton(master=frame_estrelas,image=estrela_imagem,text=estrelas["name"],compound="top",
+                                    fg_color="green",width=150,height=150,command=lambda link=estrelas["link"]:browser(link),corner_radius=30)
+        btn_estrela.grid(row=i//2, column= i%2,padx=10,pady=10)
+
+
+
 
     #Conteudo da Aba Trending
     label_trending =ctk.CTkLabel(tab_trending,text="Trending",text_color="white",font=("Helvetica",20))
