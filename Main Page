@@ -142,8 +142,10 @@ def pagina_inicial():
     label_estrelas =ctk.CTkLabel(tab_estrelas,text="Estrelas",text_color="white",font=("Helvetica",28))
     label_estrelas.pack(pady=20)
 
-    frame_estrelas = ctk.CTkFrame(master=tab_estrelas,fg_color="black")
-    frame_estrelas.pack(fill="both",expand= True,padx=10,pady=10)
+    estrelas_scroll_frame = ctk.CTkScrollableFrame(master=tab_estrelas,width=200,height=200,fg_color="black")
+    estrelas_scroll_frame.pack(fill="both",expand=True,padx=10,pady=10)
+
+    
 
     # Lista de estrelas
     estrelas = [{"image":"joerogan.png","name":"Joe Rogan","link":"https://www.youtube.com/results?search_query=joe+rogan"},
@@ -153,22 +155,28 @@ def pagina_inicial():
                 {"image":"shanon.png","name":"Shanon Sharpe","link":"https://www.youtube.com/@ClubShayShay"},
                 {"image":"Andrew.png","name":"Andrew Schulz","link":"https://www.youtube.com/@OfficialFlagrant"},
                 {"image":"vilela.png","name":"Vilela Rogerio","link":"https://www.youtube.com/@inteligencialtda"},
-                {"image":"pedro.png","name":"Pedro Mota","link":"https://www.youtube.com/results?search_query=pedro+teixeira+da+mota"}]
+                {"image":"pedro.png","name":"Pedro Mota","link":"https://www.youtube.com/results?search_query=pedro+teixeira+da+mota"},
+                {"image":"steven.png","name":"Steve Bartllet","link":"https://www.youtube.com/@TheDiaryOfACEO"}]
     
     # Função para abrir os links
     def browser(link):
         webbrowser.open(link)
     
-    # Adicionar imagens e nomes das estrelas
-    for i, estrelas in enumerate(estrelas):
-        estrela_imagem = ctk.CTkImage(dark_image=Image.open(estrelas["image"]),size=(100,100))
+    for i in range(4):
+        for j in range(3):
+            idx = i * 3 + j
+            if idx < len(estrelas):
 
-        # Botão com a imagem e nome da estrela
-        btn_estrela = ctk.CTkButton(master=frame_estrelas,image=estrela_imagem,text=estrelas["name"],compound="top",
-                                    fg_color="green",width=150,height=150,command=lambda link=estrelas["link"]:browser(link),corner_radius=30)
-        btn_estrela.grid(row=i//2, column= i%2,padx=10,pady=10)
+                frame_estrelas = ctk.CTkFrame(master=estrelas_scroll_frame,fg_color="transparent")
+                frame_estrelas.grid(row=i,column=j,padx=10,pady=10)
 
+                # Carregar imagens das estrelas
+                estrela_image = ctk.CTkImage(dark_image=Image.open(estrelas[idx]["image"]),size=(150,150))
 
+                # Cria botões com imagens
+                btn_stars = ctk.CTkButton(master=frame_estrelas,image=estrela_image,text=f"Podcast{idx + 1}",compound="top",
+                                        fg_color="green",width=150,height=100,command=lambda link=estrelas[idx]["link"]:browser(link))
+                btn_stars.pack(pady=(0,5))
 
 
     #Conteudo da Aba Trending
