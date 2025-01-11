@@ -24,7 +24,7 @@ def pagina_inicial():
     icon_favorites = ctk.CTkImage(light_image=Image.open("favoritos.png"),size=(30,30))
 
     # Tabs: Home,Estrelas, Trending, Favorites
-    tabview =ctk.CTkTabview(master=frame_principal,width=800,height=500,corner_radius=20)
+    tabview =ctk.CTkTabview(master=frame_principal,width=800,height=500,corner_radius=20,fg_color="green")
     tabview.pack(side="right",fill="both",expand=True,padx=10,pady=10)
 
     tab_home = tabview.add("Home")
@@ -87,26 +87,62 @@ def pagina_inicial():
     #========================================
     for i in range(6):
         for j in range(4):
-            idx = i*4+j
+            idx = i * 4 +j
             if idx < len(dados_podcast):
+                # Frame para organizar o botão de podcast e o de favoritar
+
+                frame_podcast = ctk.CTkFrame(master=scroll_frame,fg_color="transparent")
+                frame_podcast.grid(row=i,column=j,padx=10,pady=10)
+                
                 # Caregar a imagem do podcast
                 podcast_image = ctk.CTkImage(dark_image=Image.open(dados_podcast[idx]["image"]),size=(150,150))
 
-                #Criar botões com imagem
+                # Cria botões com imagem
+                btn_podcast=ctk.CTkButton(master=frame_podcast,image=podcast_image,text=f"Podcast{idx + 1}",compound="top",
+                                          fg_color="green",width=150,height=100,command=lambda link=dados_podcast[idx]["link"]:browser(link))
+                btn_podcast.pack(pady=(0,5))
 
-                btn_podcast = ctk.CTkButton(master=scroll_frame,image=podcast_image,text=f"Podcast{idx+1}",
-                                            compound="top",fg_color="green",width=150,height=100,command=lambda
-                                            link=dados_podcast[idx]["link"]:browser(link))
-                btn_podcast.grid(row=i,column=j,padx=10,pady=10)    
+                #===================
+                # Botão de favoritar
+                #===================
+                btn_favoritar = ctk.CTkButton(master=frame_podcast,text="Favoritar",height=30,width=30,
+                                            command=lambda podcast=dados_podcast[idx]:adicionar_favoritos(podcast))
+                btn_favoritar.pack(pady=(5,0))
+
+    #======================================
+    # Função para atualizar a tab favoritos
+    #======================================
+    def atualizar_favoritos():
+        for widget in tab_favorites.winfo_children():
+            widget.destroy()
+        
+        # Adiciona os favoritos na aba
+        for i, podcast in enumerate(favoritos):
+            podcast_image = ctk.CTkImage(dark_image=Image.open(podcast["image"]),size=(150,150))
+
+            btn_podcast = ctk.CTkButton(master=tab_favorites,image=podcast_image,text=f"Podcast{i+1}",compound="top",fg_color="green",
+            width=150,height=100,command=lambda link=podcast["link"]:browser(link))
+            btn_podcast.grid(row=i//4,column=i%4,padx=10,pady=10)
+    
+    favoritos = []
+    #==============================
+    # Função de adicionar favoritos
+    #==============================
+    def adicionar_favoritos(podcast):
+        if podcast in favoritos:
+            favoritos.remove(podcast)
+        else:
+            favoritos.append(podcast)
+        atualizar_favoritos()    
 
    
     
     
     # Conteudo da Tab de Estrelas.
-    label_estrelas =ctk.CTkLabel(tab_estrelas,text="Estrelas",text_color="black",font=("Helvetica",20))
+    label_estrelas =ctk.CTkLabel(tab_estrelas,text="Estrelas",text_color="white",font=("Helvetica",28))
     label_estrelas.pack(pady=20)
 
-    frame_estrelas = ctk.CTkFrame(master=tab_estrelas,fg_color="green")
+    frame_estrelas = ctk.CTkFrame(master=tab_estrelas,fg_color="black")
     frame_estrelas.pack(fill="both",expand= True,padx=10,pady=10)
 
     # Lista de estrelas
@@ -133,12 +169,18 @@ def pagina_inicial():
 
 
     #Conteudo da Aba Trending
-    label_trending =ctk.CTkLabel(tab_trending,text="Trending",text_color="white",font=("Helvetica",20))
+    label_trending =ctk.CTkLabel(tab_trending,text="Trending",text_color="white",font=("Helvetica",28))
     label_trending.pack(pady=20)
 
+    
     # Conteudo da Aba Favoritos
-    label_favoritos =ctk.CTkLabel(tab_favorites,text="Favoritos",text_color="white",font=("Helvetica",20))
+    label_favoritos =ctk.CTkLabel(tab_favorites,text="Favoritos",text_color="white",font=("Helvetica",28))
     label_favoritos.pack(pady=20)
+
+    frame_favoritos = ctk.CTkFrame(master=tab_favorites,fg_color="black")
+    frame_favoritos.pack(fill="both",expand=True,padx=10,pady=10)
+
+
 
     main_page.mainloop()
 
