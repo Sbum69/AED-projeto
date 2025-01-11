@@ -150,7 +150,10 @@ def pagina_inicial():
                 {"image":"lexfridmanphoto.png","name":"Lex Fridman","link":"https://www.youtube.com/results?search_query=lex+fridman"},
                 {"image":"georgejanko.png","name":"George Janko","link":"https://www.youtube.com/results?search_query=george+janko"},
                 {"image":"chris.jpeg","name":"Chris Williamsom","link":"https://www.youtube.com/@ChrisWillx"},
-                {"image":"shanon.png","name":"Shanon Sharpe","link":"https://www.youtube.com/@ClubShayShay"}]
+                {"image":"shanon.png","name":"Shanon Sharpe","link":"https://www.youtube.com/@ClubShayShay"},
+                {"image":"Andrew.png","name":"Andrew Schulz","link":"https://www.youtube.com/@OfficialFlagrant"},
+                {"image":"vilela.png","name":"Vilela Rogerio","link":"https://www.youtube.com/@inteligencialtda"},
+                {"image":"pedro.png","name":"Pedro Mota","link":"https://www.youtube.com/results?search_query=pedro+teixeira+da+mota"}]
     
     # Função para abrir os links
     def browser(link):
@@ -171,6 +174,27 @@ def pagina_inicial():
     #Conteudo da Aba Trending
     label_trending =ctk.CTkLabel(tab_trending,text="Trending",text_color="white",font=("Helvetica",28))
     label_trending.pack(pady=20)
+
+    frame_treding = ctk.CTkFrame(master=tab_trending,fg_color="black")
+    frame_treding.pack(fill="both",expand = True,padx=10,pady=10)
+
+    # Lista de trendings
+    trending = [{"image":"joeroganlogo.png","name":"The Joe Rogan Experience","link":"https://www.youtube.com/results?search_query=joe+rogan"},
+               {"image":"shanonlogo.png","name":"Club Shay Shay","link":"https://www.youtube.com/@ClubShayShay"},
+               {"image":"peweecastlogo.png","name":"Peweecast","link":"https://www.youtube.com/@PeeWeeCast"},
+               {"image":"flagrantlogo.png","name":"Flagrant","link":"https://www.youtube.com/@OfficialFlagrant"},
+               {"image":"chris.jpeg","name":"Chris Williamson","link":"https://www.youtube.com/@ChrisWillx"}]
+    
+    def browser(link):
+        webbrowser.open(link)
+    
+    for i, trending in enumerate(trending):
+        trendig_imagem = ctk.CTkImage(dark_image=Image.open(trending["image"]),size=(100,100))
+
+        btn_tendencias = ctk.CTkButton(master=frame_treding,image=trendig_imagem,text="",compound="top",
+                                     fg_color="green",width=150,height=150,command=lambda link= trending["link"]:browser(link),corner_radius=30)
+        btn_tendencias.grid(row=i//2, column = i%2, padx=10,pady=10)
+
 
     
     # Conteudo da Aba Favoritos
