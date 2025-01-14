@@ -69,6 +69,9 @@ def pagina_inicial():
     icon_estrelas = ctk.CTkImage(light_image=Image.open("staricon.png"),size=(30,30))
     icon_trending = ctk.CTkImage(light_image=Image.open("tredingicon.png"),size=(30,30))
     icon_favoritos = ctk.CTkImage(light_image=Image.open("favoritos.png"),size=(30,30))
+    icon_user = ctk.CTkImage(light_image=Image.open("usericone.png"),size=(30,30))
+    icon_categorias = ctk.CTkImage(light_image=Image.open("iconcategorias.png"),size=(30,30))
+
 
     # Tabs: Home, Estrelas, Trending, Favoritos
     tabview = ctk.CTkTabview(master=frame_principal,width=800,height=500,corner_radius=20,fg_color="green")
@@ -78,6 +81,8 @@ def pagina_inicial():
     tab_estrelas = tabview.add("Estrelas")
     tab_trending = tabview.add("Trending")
     tab_favorites = tabview.add("Favoritos")
+    tab_categorias = tabview.add("Categorias")
+    tab_user = tabview.add("Perfil")
 
     # Botões no menu lateral
     btn_home = ctk.CTkButton(menu_lateral,text="Home",image=icon_home,compound="left",
@@ -95,6 +100,13 @@ def pagina_inicial():
     btn_favoritos = ctk.CTkButton(menu_lateral,text="Favoritos",image=icon_favoritos,compound="left",
                                 fg_color="#1DB954",command=lambda:tabview.set("Favoritos"))
     btn_favoritos.pack(pady=20,padx=10,anchor="w")
+
+    btn_categorias = ctk.CTkButton(menu_lateral,text="Categorias",image=icon_categorias,compound="left",
+                                fg_color="#1DB954",command=lambda:tabview.set("Categorias"))
+    btn_categorias.pack(pady=20,padx=10,anchor="w")
+
+    btn_user = ctk.CTkButton(menu_lateral,text="Perfil",image=icon_user,compound="left",fg_color="#1DB954",command=lambda:tabview.set("Perfil"))
+    btn_user.pack(pady=20,padx=10,anchor="w")
 
     #==========================
     # Scrollbar para a tab home
@@ -163,42 +175,63 @@ def pagina_inicial():
     label_estrelas =ctk.CTkLabel(tab_estrelas,text="Estrelas",text_color="white",font=("Helvetica",28))
     label_estrelas.pack(pady=20)
 
+    #================================
+    # Scroll Bar para a tab estrelas
+    #================================
+
     estrelas_scroll_frame = ctk.CTkScrollableFrame(master=tab_estrelas,width=200,height=200,fg_color="black")
     estrelas_scroll_frame.pack(fill="both",expand=True,padx=10,pady=10)
 
-    
+    # Função para carregar os dados das estrelas
+    def carregar_dados_estrelas(ficheiro_estrela):
+        estrelas = []
+        try:
+            with open("estrelas.txt","r") as ficheiro_estrela:
+                for line in ficheiro_estrela:
+                  partes_estrela = line.strip().split(",")
+                  if len(partes_estrela) == 3:
+                    estrelas.append({"name":partes_estrela[0],"image":partes_estrela[1],"link":partes_estrela[2]})
+        except FileNotFoundError:
+            print(f"Arquivo {ficheiro_podcast} não encontrado !")
+        return estrelas 
 
-    # Lista de estrelas
-    estrelas = [{"image":"imagens/joerogan.png","name":"Joe Rogan","link":"https://www.youtube.com/results?search_query=joe+rogan"},
-                {"image":"imagens/lexfridmanphoto.png","name":"Lex Fridman","link":"https://www.youtube.com/results?search_query=lex+fridman"},
-                {"image":"imagens/georgejanko.png","name":"George Janko","link":"https://www.youtube.com/results?search_query=george+janko"},
-                {"image":"imagens/chris.jpeg","name":"Chris Williamsom","link":"https://www.youtube.com/@ChrisWillx"},
-                {"image":"imagens/shanon.png","name":"Shanon Sharpe","link":"https://www.youtube.com/@ClubShayShay"},
-                {"image":"imagens/Andrew.png","name":"Andrew Schulz","link":"https://www.youtube.com/@OfficialFlagrant"},
-                {"image":"imagens/vilela.png","name":"Vilela Rogerio","link":"https://www.youtube.com/@inteligencialtda"},
-                {"image":"imagens/pedro.png","name":"Pedro Mota","link":"https://www.youtube.com/results?search_query=pedro+teixeira+da+mota"},
-                {"image":"imagens/steven.png","name":"Steve Bartllet","link":"https://www.youtube.com/@TheDiaryOfACEO"}]
-    
-    # Função para abrir os links
+    with open("estrelas.txt","w") as ficheiro_estrela:
+
+        ficheiro_estrela.write("Joe Rogan,imagens/joerogan.png,https://www.youtube.com/results?search_query=joe+rogan\n")
+        ficheiro_estrela.write("Lex Fridman,imagens/lexfridmanphoto.png,https://www.youtube.com/results?search_query=lex+fridman\n")
+        ficheiro_estrela.write("George Janko,imagens/georgejanko.png,https://www.youtube.com/results?search_query=george+janko\n")
+        ficheiro_estrela.write("Chris Williamson,imagens/chris.jpeg,https://www.youtube.com/@ChrisWillx\n")
+        ficheiro_estrela.write("Shanon Sharpe,imagens/shanon.png,https://www.youtube.com/@ClubShayShay\n")
+        ficheiro_estrela.write("Andrew Schulz,imagens/Andrew.png,https://www.youtube.com/@OfficialFlagrant\n")
+        ficheiro_estrela.write("Vilela Rogerio,imagens/vilela.png,https://www.youtube.com/@inteligencialtda\n")
+        ficheiro_estrela.write("Pedro Mota,imagens/pedro.png,https://www.youtube.com/results?search_query=pedro+teixeira+da+mota\n")
+        ficheiro_estrela.write("Steve Bartllet,imagens/steven.png,https://www.youtube.com/@TheDiaryOfACEO\n")
+   
+      # Função para abrir os links
     def browser(link):
         webbrowser.open(link)
-    
+
+    estrelas = carregar_dados_estrelas("estrelas.txt")
+
     for i in range(4):
-        for j in range(3):
-            idx = i * 3 + j
-            if idx < len(estrelas):
+      for j in range(3):
+          idx = i * 3 + j
+          if idx < len(estrelas):
+                    frame_estrelas = ctk.CTkFrame(master=estrelas_scroll_frame,fg_color="transparent")
+                    frame_estrelas.grid(row=i,column=j,padx=10,pady=10)
 
-                frame_estrelas = ctk.CTkFrame(master=estrelas_scroll_frame,fg_color="transparent")
-                frame_estrelas.grid(row=i,column=j,padx=10,pady=10)
+                    # Carregar imagens das estrelas
+                    estrela_image = ctk.CTkImage(dark_image=Image.open(estrelas[idx]["image"]),size=(150,150))
 
-                # Carregar imagens das estrelas
-                estrela_image = ctk.CTkImage(dark_image=Image.open(estrelas[idx]["image"]),size=(150,150))
+                    # Cria botões com imagens
+                    btn_stars = ctk.CTkButton(master=frame_estrelas,image=estrela_image,text=f"Podcast{idx + 1}",compound="top",
+                                            fg_color="green",width=150,height=100,command=lambda link=estrelas[idx]["link"]:browser(link))
+                    btn_stars.pack(pady=(0,5))
 
-                # Cria botões com imagens
-                btn_stars = ctk.CTkButton(master=frame_estrelas,image=estrela_image,text=f"Podcast{idx + 1}",compound="top",
-                                        fg_color="green",width=150,height=100,command=lambda link=estrelas[idx]["link"]:browser(link))
-                btn_stars.pack(pady=(0,5))
 
+
+        
+    
 
     #Conteudo da Aba Trending
     label_trending =ctk.CTkLabel(tab_trending,text="Trending",text_color="white",font=("Helvetica",28))
@@ -232,6 +265,17 @@ def pagina_inicial():
 
     frame_favoritos = ctk.CTkFrame(master=tab_favorites,fg_color="black")
     frame_favoritos.pack(fill="both",expand=True,padx=10,pady=10)
+
+    # Conteudo da Aba Categorias
+    label_categorias = ctk.CTkLabel(tab_categorias,text="Categorias",font=("Helvetica",28))
+    label_categorias.pack(pady=20)
+    
+    label_cinema = ctk.CTkLabel(tab_categorias,text="Cinema",font=("Helvetica",20))
+    label_cinema.place(x=30,y=100)
+
+    categorias_scroll_frame = ctk.CTkScrollableFrame(tab_categorias,width=200,height=200,fg_color="black")
+    categorias_scroll_frame.pack(fill="both",expand=True,padx=10,pady=10)
+
 
 
 
