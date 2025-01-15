@@ -267,8 +267,8 @@ def pagina_inicial():
     frame_favoritos.pack(fill="both",expand=True,padx=10,pady=10)
 
     # Conteudo da Aba Categorias
-    label_categorias = ctk.CTkLabel(tab_humor,text="Humor",font=("Helvetica",28))
-    label_categorias.pack(pady=20)
+    label_humor = ctk.CTkLabel(tab_humor,text="Humor",font=("Helvetica",28))
+    label_humor.pack(pady=20)
     
     
 
