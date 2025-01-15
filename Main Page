@@ -70,7 +70,7 @@ def pagina_inicial():
     icon_trending = ctk.CTkImage(light_image=Image.open("tredingicon.png"),size=(30,30))
     icon_favoritos = ctk.CTkImage(light_image=Image.open("favoritos.png"),size=(30,30))
     icon_user = ctk.CTkImage(light_image=Image.open("usericone.png"),size=(30,30))
-    icon_categorias = ctk.CTkImage(light_image=Image.open("iconcategorias.png"),size=(30,30))
+    icon_humor = ctk.CTkImage(light_image=Image.open("humor.png"),size=(30,30))
 
 
     # Tabs: Home, Estrelas, Trending, Favoritos
@@ -81,7 +81,7 @@ def pagina_inicial():
     tab_estrelas = tabview.add("Estrelas")
     tab_trending = tabview.add("Trending")
     tab_favorites = tabview.add("Favoritos")
-    tab_categorias = tabview.add("Categorias")
+    tab_humor = tabview.add("Humor")
     tab_user = tabview.add("Perfil")
 
     # Botões no menu lateral
@@ -101,9 +101,9 @@ def pagina_inicial():
                                 fg_color="#1DB954",command=lambda:tabview.set("Favoritos"))
     btn_favoritos.pack(pady=20,padx=10,anchor="w")
 
-    btn_categorias = ctk.CTkButton(menu_lateral,text="Categorias",image=icon_categorias,compound="left",
-                                fg_color="#1DB954",command=lambda:tabview.set("Categorias"))
-    btn_categorias.pack(pady=20,padx=10,anchor="w")
+    btn_humor = ctk.CTkButton(menu_lateral,text="Humor",image=icon_humor,compound="left",
+                                fg_color="#1DB954",command=lambda:tabview.set("Humor"))
+    btn_humor.pack(pady=20,padx=10,anchor="w")
 
     btn_user = ctk.CTkButton(menu_lateral,text="Perfil",image=icon_user,compound="left",fg_color="#1DB954",command=lambda:tabview.set("Perfil"))
     btn_user.pack(pady=20,padx=10,anchor="w")
@@ -260,22 +260,19 @@ def pagina_inicial():
 
     
     # Conteudo da Aba Favoritos
-    label_favoritos =ctk.CTkLabel(tab_favorites,text="Favoritos",text_color="white",font=("Helvetica",28))
+    label_favoritos =ctk.CTkLabel(tab_favorites,text="",text_color="white",font=("Helvetica",28))
     label_favoritos.pack(pady=20)
 
     frame_favoritos = ctk.CTkFrame(master=tab_favorites,fg_color="black")
     frame_favoritos.pack(fill="both",expand=True,padx=10,pady=10)
 
     # Conteudo da Aba Categorias
-    label_categorias = ctk.CTkLabel(tab_categorias,text="Categorias",font=("Helvetica",28))
+    label_categorias = ctk.CTkLabel(tab_humor,text="Humor",font=("Helvetica",28))
     label_categorias.pack(pady=20)
     
-    label_cinema = ctk.CTkLabel(tab_categorias,text="Cinema",font=("Helvetica",20))
-    label_cinema.place(x=30,y=100)
+    
 
-    categorias_scroll_frame = ctk.CTkScrollableFrame(tab_categorias,width=200,height=200,fg_color="black")
-    categorias_scroll_frame.pack(fill="both",expand=True,padx=10,pady=10)
-
+    
 
 
 
