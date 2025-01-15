@@ -192,7 +192,7 @@ def pagina_inicial():
                   if len(partes_estrela) == 3:
                     estrelas.append({"name":partes_estrela[0],"image":partes_estrela[1],"link":partes_estrela[2]})
         except FileNotFoundError:
-            print(f"Arquivo {ficheiro_podcast} não encontrado !")
+            print(f"Arquivo {ficheiro_estrela} não encontrado !")
         return estrelas 
 
     with open("estrelas.txt","w") as ficheiro_estrela:
@@ -229,10 +229,6 @@ def pagina_inicial():
                     btn_stars.pack(pady=(0,5))
 
 
-
-        
-    
-
     #Conteudo da Aba Trending
     label_trending =ctk.CTkLabel(tab_trending,text="Trending",text_color="white",font=("Helvetica",28))
     label_trending.pack(pady=20)
@@ -240,22 +236,43 @@ def pagina_inicial():
     frame_treding = ctk.CTkFrame(master=tab_trending,fg_color="black")
     frame_treding.pack(fill="both",expand = True,padx=10,pady=10)
 
-    # Lista de trendings
-    trending = [{"image":"imagens/joeroganlogo.png","name":"The Joe Rogan Experience","link":"https://www.youtube.com/results?search_query=joe+rogan"},
-               {"image":"imagens/shanonlogo.png","name":"Club Shay Shay","link":"https://www.youtube.com/@ClubShayShay"},
-               {"image":"imagens/peweecastlogo.png","name":"Peweecast","link":"https://www.youtube.com/@PeeWeeCast"},
-               {"image":"imagens/flagrantlogo.png","name":"Flagrant","link":"https://www.youtube.com/@OfficialFlagrant"},
-               {"image":"imagens/chris.jpeg","name":"Chris Williamson","link":"https://www.youtube.com/@ChrisWillx"}]
+    #========================================
+    # Função para carregar dados dos trendings
+    #========================================
+
     
+    def carregar_dados_trending(ficheiro_estrela):
+        trending = []
+        try:
+            with open("trending.txt","r") as ficheiro_trending:
+                
+                for line in ficheiro_trending:
+                  partes_trending = line.strip().split(",")
+                  if len(partes_trending) == 3:
+                    trending.append({"name":partes_trending[0],"image":partes_trending[1],"link":partes_trending[2]})
+        except FileNotFoundError:
+            print(f"Arquivo {ficheiro_trending} não encontrado !")
+        return trending
+
+    with open("trending.txt","w") as ficheiro_trending:
+        
+        ficheiro_trending.write("Joe Rogan,imagens/joeroganlogo.png,https://www.youtube.com/results?search_query=joe+rogan\n")
+        ficheiro_trending.write("Peweecast,imagens/peweecastlogo.png,https://www.youtube.com/@PeeWeeCast\n")
+        ficheiro_trending.write("Shay Shay Club,imagens/shanonlogo.png,https://www.youtube.com/@ClubShayShay\n")
+        ficheiro_trending.write("Flagrant,imagens/flagrantlogo.png,https://www.youtube.com/@OfficialFlagrant\n")
+        
+        
     def browser(link):
         webbrowser.open(link)
+    
+    trending = carregar_dados_trending("trending.txt")
     
     for i, trending in enumerate(trending):
         trendig_imagem = ctk.CTkImage(dark_image=Image.open(trending["image"]),size=(100,100))
 
-        btn_tendencias = ctk.CTkButton(master=frame_treding,image=trendig_imagem,text="",compound="top",
+        btn_trending = ctk.CTkButton(master=frame_treding,image=trendig_imagem,text="",compound="top",
                                      fg_color="green",width=150,height=150,command=lambda link= trending["link"]:browser(link),corner_radius=30)
-        btn_tendencias.grid(row=i//2, column = i%2, padx=10,pady=10)
+        btn_trending.grid(row=i//2, column = i%2, padx=10,pady=10)
 
 
     
