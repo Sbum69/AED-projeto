@@ -71,6 +71,8 @@ def pagina_inicial():
     icon_favoritos = ctk.CTkImage(light_image=Image.open("favoritos.png"),size=(30,30))
     icon_user = ctk.CTkImage(light_image=Image.open("usericone.png"),size=(30,30))
     icon_humor = ctk.CTkImage(light_image=Image.open("humor.png"),size=(30,30))
+    icon_desenvolvimento = ctk.CTkImage(light_image=Image.open("imagens/desenvolvimento.png"),size=(30,30))
+    icon_entretenimento = ctk.CTkImage(light_image=Image.open("imagens/entertenimento.png"),size=(30,30))
 
 
     # Tabs: Home, Estrelas, Trending, Favoritos
@@ -82,6 +84,8 @@ def pagina_inicial():
     tab_trending = tabview.add("Trending")
     tab_favorites = tabview.add("Favoritos")
     tab_humor = tabview.add("Humor")
+    tab_desenvolvimento = tabview.add("Desenvolvimento")
+    tab_entertenimento = tabview.add("Entertenimento")
     tab_user = tabview.add("Perfil")
 
     # Botões no menu lateral
@@ -104,6 +108,14 @@ def pagina_inicial():
     btn_humor = ctk.CTkButton(menu_lateral,text="Humor",image=icon_humor,compound="left",
                                 fg_color="#1DB954",command=lambda:tabview.set("Humor"))
     btn_humor.pack(pady=20,padx=10,anchor="w")
+
+    btn_desenvolvimento = ctk.CTkButton(menu_lateral,text="Desenvolvimento",image=icon_desenvolvimento,compound="left",
+                                    fg_color="#1DB954",command=lambda:tabview.set("Desenvolvimento"))
+    btn_desenvolvimento.pack(pady=20,padx=10,anchor="w")
+
+    btn_entertenimento = ctk.CTkButton(menu_lateral,text="Entertenimento",image=icon_entretenimento,compound="left",
+                                    fg_color="#1DB954",command=lambda:tabview.set("Entertenimento"))
+    btn_entertenimento.pack(pady=20,padx=10,anchor="w")
 
     btn_user = ctk.CTkButton(menu_lateral,text="Perfil",image=icon_user,compound="left",fg_color="#1DB954",command=lambda:tabview.set("Perfil"))
     btn_user.pack(pady=20,padx=10,anchor="w")
@@ -224,7 +236,7 @@ def pagina_inicial():
                     estrela_image = ctk.CTkImage(dark_image=Image.open(estrelas[idx]["image"]),size=(150,150))
 
                     # Cria botões com imagens
-                    btn_stars = ctk.CTkButton(master=frame_estrelas,image=estrela_image,text=f"Podcast{idx + 1}",compound="top",
+                    btn_stars = ctk.CTkButton(master=frame_estrelas,image=estrela_image,text=estrelas[idx]["name"],compound="top",
                                             fg_color="green",width=150,height=100,command=lambda link=estrelas[idx]["link"]:browser(link))
                     btn_stars.pack(pady=(0,5))
 
@@ -241,7 +253,7 @@ def pagina_inicial():
     #========================================
 
     
-    def carregar_dados_trending(ficheiro_estrela):
+    def carregar_dados_trending(ficheiro_trending):
         trending = []
         try:
             with open("trending.txt","r") as ficheiro_trending:
@@ -283,9 +295,156 @@ def pagina_inicial():
     frame_favoritos = ctk.CTkFrame(master=tab_favorites,fg_color="black")
     frame_favoritos.pack(fill="both",expand=True,padx=10,pady=10)
 
-    # Conteudo da Aba Categorias
+    #============================
+    # Conteudo da aba Humor
+    #============================
     label_humor = ctk.CTkLabel(tab_humor,text="Humor",font=("Helvetica",28))
     label_humor.pack(pady=20)
+
+    frame_humor = ctk.CTkFrame(master=tab_humor,fg_color="black")
+    frame_humor.pack(fill="both",expand = True,padx=10,pady=10)
+
+    #==================================================
+    # Função para carregar dados dos podcasts de humor
+    #==================================================
+
+    def carregar_dados_humor(ficheiro_humor):
+        humor = []
+        try:
+            with open("humor.txt","r") as ficheiro_humor:
+                
+                for line in ficheiro_humor:
+                  partes_humor = line.strip().split(",")
+                  if len(partes_humor) == 3:
+                    humor.append({"name":partes_humor[0],"image":partes_humor[1],"link":partes_humor[2]})
+        except FileNotFoundError:
+            print(f"Arquivo {ficheiro_humor} não encontrado !")
+        return humor
+    
+    with open("humor.txt","w") as ficheiro_humor:
+
+        ficheiro_humor.write("Shay Shay Club,imagens/shanonlogo.png,https://www.youtube.com/@ClubShayShay\n")
+        ficheiro_humor.write("ShxtsnGigs Podcast,imagens/sixguys.jpg,https://www.youtube.com/@ShtsNGigsPodcast\n")
+        ficheiro_humor.write("800 Pound Gorilla Media,imagens/gorrila.png,https://www.youtube.com/@800pgm/videos\n")
+    
+    
+    def browser(link):
+        webbrowser.open(link)
+    
+    humor = carregar_dados_humor(ficheiro_humor)
+
+    for i, humor in enumerate(humor):
+        humor_imagem = ctk.CTkImage(dark_image=Image.open(humor["image"]),size=(100,100))
+
+        btn_humor = ctk.CTkButton(master=frame_humor,image=humor_imagem,text="",compound="top",
+                                     fg_color="green",width=150,height=150,command=lambda link= humor["link"]:browser(link),corner_radius=30)
+        btn_humor.grid(row=i//2, column = i%2, padx=10,pady=10)
+    
+    
+    #===================================
+    # Conteudo da aba de Desenvolvimento
+    #===================================
+
+    label_desenvolvimento = ctk.CTkLabel(tab_humor,text="Desenvolvimento Pessoal",font=("Helvetica",28))
+    label_desenvolvimento.pack(pady=20)
+
+    frame_desenvolvimento = ctk.CTkFrame(master=tab_desenvolvimento,fg_color="black")
+    frame_desenvolvimento.pack(fill="both",expand = True,padx=10,pady=10)
+
+    #===========================================================
+    # Função para carregar dados dos podcasts de Desenvolvimento
+    #===========================================================
+
+    def carregar_dados_desenvolvimento(ficheiro_desenvolvimento):
+        desenvolvimento = []
+        try:
+            with open("desenvolvimento.txt","r") as ficheiro_desenvolvimento:
+                
+                for line in ficheiro_desenvolvimento:
+                  partes_desenvolvimento = line.strip().split(",")
+                  if len(partes_desenvolvimento) == 3:
+                    desenvolvimento.append({"name":partes_desenvolvimento[0],"image":partes_desenvolvimento[1],"link":partes_desenvolvimento[2]})
+        except FileNotFoundError:
+            print(f"Arquivo {ficheiro_desenvolvimento} não encontrado !")
+        return desenvolvimento
+    
+    with open("desenvolvimento.txt","w") as ficheiro_desenvolvimento:
+
+        ficheiro_desenvolvimento.write("The Diary of a CEO,imagens/steven.png,https://www.youtube.com/@TheDiaryOfACEO\n")
+        ficheiro_desenvolvimento.write("Lex Fridman,imagens/lexfridmanphoto.png,https://www.youtube.com/results?search_query=lex+fridman\n")
+        ficheiro_desenvolvimento.write("The Mindset Mentor Podcast,imagens/mindset.png,https://www.youtube.com/@mindsetmentorpodcast\n")
+        ficheiro_desenvolvimento.write("Chris Williamson,imagens/chris.jpeg,https://www.youtube.com/@ChrisWillx\n")
+
+    def browser(link):
+        webbrowser.open(link)
+    
+    desenvolvimento = carregar_dados_desenvolvimento(ficheiro_desenvolvimento)
+
+    for i, desenvolvimento in enumerate(desenvolvimento):
+        desenvolvimento_image = ctk.CTkImage(dark_image=Image.open(desenvolvimento["image"]),size=(100,100))
+
+        btn_desenvolvimento = ctk.CTkButton(master=frame_desenvolvimento,image=desenvolvimento_image,text=desenvolvimento["name"],compound="top",
+                                        fg_color="green",width=150,height=150,command=lambda link=desenvolvimento["link"]:browser(link),corner_radius=30)
+        btn_desenvolvimento.grid(row=i//2, column = i%2, padx=10,pady=10)
+
+    
+    #===================================
+    # Conteudo da aba de Entertrenimento
+    #===================================
+
+    label_entertenimento = ctk.CTkLabel(tab_entertenimento,text="Entertenimento",font=("Helvetica",28))
+    label_entertenimento.pack(pady=20)
+
+    frame_entertenimento = ctk.CTkFrame(master=tab_entertenimento,fg_color="black")
+    frame_entertenimento.pack(fill="both",expand = True,padx=10,pady=10)
+
+
+    #===========================================================
+    # Função para carregar dados dos podcasts de Entertenimento
+    #===========================================================
+
+    def carregar_dados_entertenimento(ficheiro_entertenimento):
+        entertenimento = []
+        try:
+            with open("entertenimento.txt","r") as ficheiro_entertenimento:
+                
+                for line in ficheiro_entertenimento:
+                  partes_entertenimento = line.strip().split(",")
+                  if len(partes_entertenimento) == 3:
+                    entertenimento.append({"name":partes_entertenimento[0],"image":partes_entertenimento[1],"link":partes_entertenimento[2]})
+        except FileNotFoundError:
+            print(f"Arquivo {ficheiro_entertenimento} não encontrado !")
+        return entertenimento
+    
+    with open("entertenimento.txt","w") as ficheiro_entertenimento:
+
+        ficheiro_entertenimento.write("Joe Rogan,imagens/joeroganlogo.png,https://www.youtube.com/results?search_query=joe+rogan\n")
+        ficheiro_entertenimento.write("Peweecast,imagens/peweecastlogo.png,https://www.youtube.com/@PeeWeeCast\n")
+        ficheiro_entertenimento.write("Flagrant,imagens/flagrantlogo.png,https://www.youtube.com/@OfficialFlagrant\n")
+        ficheiro_entertenimento.write("Flow Podcast,imagens/flowpodcastlogo.png,https://www.youtube.com/@FlowPodcast\n")
+
+    def browser(link):
+        webbrowser.open(link)
+    
+    entertenimento = carregar_dados_entertenimento(ficheiro_entertenimento)
+
+    for i, entertenimento in enumerate(entertenimento):
+        entertenimento_image = ctk.CTkImage(dark_image=Image.open(entertenimento["image"]),size=(100,100))
+
+        btn_entertenimento = ctk.CTkButton(master=frame_entertenimento,image=entertenimento_image,text=entertenimento["name"],compound="top",
+                                        fg_color="green",width=150,height=150,command=lambda link=entertenimento["link"]:browser(link),corner_radius=30)
+        btn_entertenimento.grid(row=i//2, column = i%2, padx=10,pady=10)
+    
+
+
+
+
+
+
+        
+
+
+
     
     
 
