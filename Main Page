@@ -65,6 +65,58 @@ def pagina_inicial():
     menu_lateral = ctk.CTkFrame(master=frame_principal,width=200,fg_color="#1DB954")
     menu_lateral.pack(side="left",fill="y")
 
+    # Barra de Pesquisa
+
+    frame_pesquisa = ctk.CTkFrame(main_page,width=300)
+    frame_pesquisa.pack(pady=20)
+
+    # Entrada de texto para a barra de pesquisa
+
+    entry_pesquisa = ctk.CTkEntry(frame_pesquisa,width=400,placeholder_text="Pesquisa um podcast...")
+    entry_pesquisa.pack(side="left",padx=10)
+
+    # Frame para exibir os resultados da pesquisa
+
+    frame_resultados_pesquisa = ctk.CTkFrame(main_page,fg_color="green")
+    frame_resultados_pesquisa.pack(fill="both",expand=True,padx=20,pady=20)
+
+    # Função para processar a pesquisa
+    def pesquisar():
+        for widget in frame_resultados_pesquisa.winfo_children():
+            widget.destroy
+
+        query = entry_pesquisa.get().strip().lower()
+        if not query:
+            messagebox.showinfo("Pesquisa","Por favor,insira o nome de um podcast.")
+            return
+        # Carregar dados dos podcasts
+
+        with open("podcasts.txt","r") as ficheiro_podcast:
+            podcasts_disponiveis = [line.strip().split(",")for line in ficheiro_podcast.readlines()]
+
+            resultados = [podcast for podcast in podcasts_disponiveis if query in podcast[0].lower()]
+
+            if resultados:
+                for podcast in resultados:
+                    # Aqui estou a criar um frame para exibir os resultados
+                    frame_resultado = ctk.CTkFrame(master=frame_resultados_pesquisa,fg_color="green")
+                    frame_resultado.pack(fill="x",padx=10,pady=5)
+
+                    # Carregar imagem do podcast
+                    podcast_image = ctk.CTkImage(dark_image=Image.open(podcast[1]),size=(50,50))
+
+                    btn_podcast = ctk.CTkButton(master=frame_resultado,image=podcast_image,text=podcast[0],
+                    compound="left",fg_color="transparent",text_color="white", command=lambda link=podcast[2]:browser(link),)
+                    btn_podcast.pack(side="left",padx=10)
+            else:
+                ctk.CTkLabel(frame_resultados_pesquisa,text="Nenhum podcast encontrado",text_color="white",font=("Helvetica",16)).pack(pady=20)
+
+
+
+       
+
+    
+
     # Icones para o Menu
     icon_home = ctk.CTkImage(light_image=Image.open("home_icon.png"),size=(30,30))
     icon_estrelas = ctk.CTkImage(light_image=Image.open("staricon.png"),size=(30,30))
@@ -90,6 +142,11 @@ def pagina_inicial():
     tab_user = tabview.add("Perfil")
 
     # Botões no menu lateral
+    btn_pesquisar = ctk.CTkButton(frame_pesquisa,text="Pesquisar",command=pesquisar)
+    btn_pesquisar.configure(state="normal")
+   
+    btn_pesquisar.pack(side="left")
+    
     btn_home = ctk.CTkButton(menu_lateral,text="Home",image=icon_home,compound="left",
                             fg_color="#1DB954",command=lambda:tabview.set("Home"))
     btn_home.pack(pady=20,padx=10,anchor="w")
@@ -180,7 +237,7 @@ def pagina_inicial():
     def adicionar_favoritos(podcast):
         if podcast in favoritos:
             favoritos.remove(podcast)
-            messagebox.showinfo(f"{podcast['name']} removido dos favoritos")
+            messagebox.showinfo("Favoritos",f"{podcast['name']} removido dos favoritos")
     
         else:
             favoritos.append(podcast)
@@ -256,7 +313,6 @@ def pagina_inicial():
     # Função para carregar dados dos trendings
     #========================================
 
-    
     def carregar_dados_trending(ficheiro_trending):
         trending = []
         try:
@@ -439,21 +495,6 @@ def pagina_inicial():
                                         fg_color="green",width=150,height=150,command=lambda link=entertenimento["link"]:browser(link),corner_radius=30)
         btn_entertenimento.grid(row=i//2, column = i%2, padx=10,pady=10)
     
-
-
-
-
-
-
-        
-
-
-
-    
-    
-
-    
-
 
 
     main_page.mainloop()
