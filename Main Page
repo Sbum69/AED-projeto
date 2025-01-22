@@ -2,6 +2,7 @@ import os
 from PIL import Image
 import customtkinter as ctk
 import webbrowser
+from tkinter import messagebox
 
 #==========================
 # Função para abrir os links
@@ -179,8 +180,11 @@ def pagina_inicial():
     def adicionar_favoritos(podcast):
         if podcast in favoritos:
             favoritos.remove(podcast)
+            messagebox.showinfo(f"{podcast['name']} removido dos favoritos")
+    
         else:
             favoritos.append(podcast)
+            messagebox.showinfo("Favoritos",f"O Podcast {podcast['name']} foi adicionado aos favoritos!")
         atualizar_favoritos()   
 
     # Conteudo da Tab de Estrelas.
