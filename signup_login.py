@@ -3,6 +3,9 @@ from PIL import Image
 import os
 from tkinter import messagebox
 import webbrowser
+from datetime import datetime
+from github import pagina_inicial
+
 
 # Configuração inicial
 ctk.set_appearance_mode("dark")
@@ -25,7 +28,7 @@ def criar_frame_signup():
     frame_signup.pack(padx=10, pady=10, fill="both", expand=True)
 
     # Logotipo
-    logo_image = ctk.CTkImage(dark_image=Image.open("logo aed.png"), size=(100, 100))
+    logo_image = ctk.CTkImage(dark_image=Image.open("imagens/logo aed.png"), size=(100, 100))
     logo_label = ctk.CTkLabel(frame_signup, image=logo_image, text="")
     logo_label.place(relx=0.5, y=50, anchor="center")
 
@@ -64,7 +67,7 @@ def criar_frame_signup():
 
         # Registro do usuário (simulação de banco de dados)
         with open("usuarios.txt", "a") as arquivo:
-            arquivo.write(f"{user},{mail},{passwd}\n")
+            arquivo.write(f"{user},{mail},{passwd},{datetime.now().date()},,,\n")
         messagebox.showinfo("Sucesso", "Usuário cadastrado com sucesso!")
         criar_frame_login()
 
@@ -85,7 +88,7 @@ def criar_frame_login():
     frame_login.pack(padx=10, pady=10, fill="both", expand=True)
 
     # Logotipo
-    logo_image = ctk.CTkImage(dark_image=Image.open("logo aed.png"), size=(100, 100))
+    logo_image = ctk.CTkImage(dark_image=Image.open("imagens/logo aed.png"), size=(100, 100))
     logo_label = ctk.CTkLabel(frame_login, image=logo_image, text="")
     logo_label.place(relx=0.5, y=50, anchor="center")
 
@@ -113,7 +116,8 @@ def criar_frame_login():
                 if dados[0] == user and dados[2] == passwd:
                     salvar_dados_login(user)
                     messagebox.showinfo("Sucesso", f"Bem-vindo, {user}!")
-                    return
+                    app.destroy()
+                    pagina_inicial(dados)
             messagebox.showerror("Erro", "Usuário ou senha incorretos!")
         except FileNotFoundError:
             messagebox.showerror("Erro", "Nenhum usuário cadastrado!")
@@ -133,7 +137,49 @@ def criar_frame_login():
 # Função para entrar como convidado
 def entrar_como_convidado():
     messagebox.showinfo("Convidado", "Você está entrando como convidado. Algumas funcionalidades podem estar limitadas.")
+    app.destroy()
+    pagina_inicial('')
+
+
+    def user_info(username):
+
+        frame_principal = ctk.CTkFrame(master=user_page, fg_color="green")
+        frame_principal.pack(fill="both", expand=True, padx=20, pady=20)
+
+    titulo = ctk.CTkLabel(master=frame_principal, text=f"Informações do Usuário - {username}",
+                          font=ctk.CTkFont(size=20, weight="bold"), text_color="white")
+    titulo.pack(pady=10)
+
+    form_frame = ctk.CTkFrame(master=frame_principal, fg_color="#282828", corner_radius=15)
+    form_frame.pack(fill="both", expand=True, padx=10, pady=10)
+
+    user_data = {}
+    try:
+        with open("userinfo.txt", "r") as userinfo_file:
+            for linha in userinfo_file:
+                if linha.startswith(username):
+                    campos = linha.strip().split(",")
+                    user_data = {
+                        "Username": campos[0],
+                        "Senha": campos[1],
+                        "Data de Criação": campos[2].split(": ")[1]
+                    }
+                    break
+    except FileNotFoundError:
+        messagebox.showerror("Erro", "Arquivo de informações do usuário não encontrado!")
+        return
+
+    campos_widgets = {}
+    for idx, (campo, valor) in enumerate(user_data.items()):
+        label = ctk.CTkLabel(master=form_frame, text=f"{campo}:", text_color="white", font=ctk.CTkFont(size=14))
+        label.grid(row=idx, column=0, padx=10, pady=10, sticky="e")
+
+        entry = ctk.CTkEntry(master=form_frame, width=300, fg_color="#404040", text_color="white", corner_radius=10)
+        entry.insert(0, valor)
+        entry.grid(row=idx, column=1, padx=10, pady=10, sticky="w")
+        campos_widgets[campo] = entry
 
 # Inicializa a tela de login ao abrir o app
 criar_frame_login()
 app.mainloop()
+
