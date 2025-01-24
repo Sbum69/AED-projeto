@@ -102,3 +102,4 @@ def user_info():
 
 # Chamar a função para testar
 user_info()
+
