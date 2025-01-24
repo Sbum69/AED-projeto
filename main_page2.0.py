@@ -3,7 +3,7 @@ from PIL import Image
 import customtkinter as ctk
 import webbrowser
 from tkinter import messagebox
-
+import glob
 # Função para abrir os links
 def browser(link):
     webbrowser.open(link)
@@ -22,13 +22,13 @@ def carregar_dados_podcasts(ficheiro_podcast):
     return podcasts
 
 """
- Criar um ficheiro txt onde estarão os 
+Criar um ficheiro txt onde estarão os 
 dados dos podcasts
 """
 with open("podcasts.txt","w") as ficheiro_podcast:
         ficheiro_podcast.write("Joe Rogan,imagens/joerogan.png,https://www.youtube.com/live/ycPr5-27vSI?si=MLe4_W3phP3af-Cf\n")
-        ficheiro_podcast.write("Peweecast,imagens/peweecast.png,https://youtu.be/RmyzRnLZ2WE?si=Yjtvme3ZIq_o8nXA\n")
-        ficheiro_podcast.write("Chris Williamson,imagens/chris.png,https://youtu.be/DLfWv_Ey27s?si=0TBI6EcvkQ8LurOp\n")
+        ficheiro_podcast.write("Peweecast,imagens/peweecast.jpeg,https://youtu.be/RmyzRnLZ2WE?si=Yjtvme3ZIq_o8nXA\n")
+        ficheiro_podcast.write("Chris Williamson,imagens/chris.jpeg,https://youtu.be/DLfWv_Ey27s?si=0TBI6EcvkQ8LurOp\n")
         ficheiro_podcast.write("Flowpodcast,imagens/flowpodcast.png,https://youtu.be/P3mX2WB6xhQ?si=2IBW3XTF6zGY3WsC\n")
         ficheiro_podcast.write("The George Janko Show,imagens/georgejanko.png,https://youtu.be/6t-l0Y_uj9k?si=xgFd4n79eK74BrWo\n")
         ficheiro_podcast.write("The Diary of a CEO,imagens/thediary.png,https://youtu.be/jyCJeglqCe4?si=VRQnhegJ0gvIzdZO\n")
@@ -57,21 +57,67 @@ def pagina_inicial(user):
     main_page = ctk.CTk()
     main_page.title("PodSpot")
     main_page.geometry("1024x700")
+    main_page.resizable()
 
     # Frame principal da janela inicial
     frame_principal = ctk.CTkFrame(master=main_page,fg_color="green")
     frame_principal.pack(fill="both",expand=True)
 
     # Menu lateral de navegação
-    menu_lateral = ctk.CTkFrame(master=frame_principal,width=200,fg_color="#1DB954")
+    menu_lateral = ctk.CTkFrame(master=frame_principal,width=400,fg_color="#1DB954")
     menu_lateral.pack(side="left",fill="y")
+
+   # Barra de Pesquisa
+
+    frame_pesquisa = ctk.CTkFrame(main_page,width=800)
+    frame_pesquisa.pack(pady=20,expand=True)
+
+    # Entrada de texto para a barra de pesquisa
+
+    entry_pesquisa = ctk.CTkEntry(frame_pesquisa,width=400,placeholder_text="Pesquisa um podcast...")
+    entry_pesquisa.pack(side="left",padx=10)
+
+    # Frame para exibir os resultados da pesquisa
+
+    frame_resultados_pesquisa = ctk.CTkFrame(main_page,fg_color="green",width=800,height=1020)
+    frame_resultados_pesquisa.pack(fill="both",expand=True,padx=20,pady=20)
+
+    scroll_pesquisa = ctk.CTkScrollableFrame(frame_resultados_pesquisa,height=500,fg_color="black")
+    scroll_pesquisa.pack(fill="both",expand=True,padx=10,pady=10)
+    
+    # Função para pesquisar
+    def pesquisar():
+        for widget in scroll_pesquisa.winfo_children():
+            widget.destroy
+        
+        query = entry_pesquisa.get().strip().lower()
+        if not query:
+            messagebox.showinfo("Pesquisa","Por favor,insira o nome de um podcast.")
+            return
+        # Carregar dados dos Podcasts
+
+        with open("podcasts.txt","r") as ficheiro_podcast:
+            podcasts_disponiveis = [line.strip().split(",")for line in ficheiro_podcast.readlines()]
+
+            resultados = [podcast for podcast in podcasts_disponiveis if query in podcast[0].lower()]
+
+            if resultados:
+                for podcast in resultados:
+                    # Carregar imagem do Podacast Pesquisado
+                    podcast_image = ctk.CTkImage(dark_image=Image.open(podcast[1]),size=(70,70))
+
+                    btn_podcast = ctk.CTkButton(scroll_pesquisa,image=podcast_image,text=podcast[0],
+                    compound="left",fg_color="transparent",text_color="white", command=lambda link=podcast[2]:browser(link),)
+                    btn_podcast.pack(side="left",padx=10)
+            else:
+                ctk.CTkLabel(frame_resultados_pesquisa,text="Nenhum podcast encontrado",text_color="white",font=("Helvetica",16)).pack(pady=20)
 
     # Icones para o Menu
     icon_home = ctk.CTkImage(light_image=Image.open("home_icon.png"),size=(30,30))
     icon_estrelas = ctk.CTkImage(light_image=Image.open("staricon.png"),size=(30,30))
     icon_trending = ctk.CTkImage(light_image=Image.open("tredingicon.png"),size=(30,30))
     icon_favoritos = ctk.CTkImage(light_image=Image.open("favoritos.png"),size=(30,30))
-    icon_gostos = ctk.CTkImage(light_image=Image.open("Gostos.png"), size=(30, 30))
+    icon_gostos = ctk.CTkImage(light_image=Image.open("imagens/Gostos.png"), size=(30, 30))
     icon_user = ctk.CTkImage(light_image=Image.open("usericone.png"),size=(30,30))
     icon_humor = ctk.CTkImage(light_image=Image.open("humor.png"),size=(30,30))
     icon_desenvolvimento = ctk.CTkImage(light_image=Image.open("imagens/desenvolvimento.png"),size=(30,30))
@@ -93,6 +139,11 @@ def pagina_inicial(user):
     tab_user = tabview.add("Perfil")
 
     # Botões no menu lateral
+    
+    btn_pesquisar = ctk.CTkButton(frame_pesquisa, text="Search", command=pesquisar)
+    
+    btn_pesquisar.pack(side="left", padx=5)
+
     btn_home = ctk.CTkButton(menu_lateral,text="Home",image=icon_home,compound="left",
                             fg_color="#1DB954",command=lambda:tabview.set("Home"))
     btn_home.pack(pady=20,padx=10,anchor="w")
@@ -127,6 +178,7 @@ def pagina_inicial(user):
     btn_user = ctk.CTkButton(menu_lateral,text="Perfil",image=icon_user,compound="left",fg_color="#1DB954",command=lambda:tabview.set("Perfil"))
     btn_user.pack(pady=20,padx=10,anchor="w")
 
+
     # Scrollbar para a tab home
     scroll_frame = ctk.CTkScrollableFrame(master=tab_home,width=200,height=200,fg_color="black")
     scroll_frame.pack(fill="both",expand=True,padx=10,pady=10)
@@ -134,6 +186,8 @@ def pagina_inicial(user):
     #Carregar dados do arquivo
     ficheiro_podcast = carregar_dados_podcasts("podcasts.txt")
     print(ficheiro_podcast)
+
+    # Função para pesquisar Podcasts
 
     # Loop para criar botões de podcast
     for i in range(6):
@@ -202,7 +256,7 @@ def pagina_inicial(user):
     def adicionar_favoritos(podcast):
         if podcast in favoritos:
             favoritos.remove(podcast)
-            messagebox.showinfo(f"{podcast['name']} removido dos favoritos")
+            messagebox.showinfo("Favoritos",f"{podcast['name']} removido dos favoritos")
     
         else:
             favoritos.append(podcast)
@@ -213,7 +267,7 @@ def pagina_inicial(user):
     def adicionar_gostos(podcast):
         if podcast in gostos:
             gostos.remove(podcast)
-            messagebox.showinfo(f"{podcast['name']} removido dos gostos")
+            messagebox.showinfo("Gostos",f"{podcast['name']} foi removido dos gostos")
         else:
             gostos.append(podcast)
             messagebox.showinfo("Gostos",f"O Podcast {podcast['name']} foi adicionado aos gostos!")
@@ -245,7 +299,7 @@ def pagina_inicial(user):
         ficheiro_estrela.write("Joe Rogan,imagens/joerogan.png,https://www.youtube.com/results?search_query=joe+rogan\n")
         ficheiro_estrela.write("Lex Fridman,imagens/lexfridmanphoto.png,https://www.youtube.com/results?search_query=lex+fridman\n")
         ficheiro_estrela.write("George Janko,imagens/georgejanko.png,https://www.youtube.com/results?search_query=george+janko\n")
-        ficheiro_estrela.write("Chris Williamson,imagens/chris.png,https://www.youtube.com/@ChrisWillx\n")
+        ficheiro_estrela.write("Chris Williamson,imagens/chris.jpeg,https://www.youtube.com/@ChrisWillx\n")
         ficheiro_estrela.write("Shanon Sharpe,imagens/shanon.png,https://www.youtube.com/@ClubShayShay\n")
         ficheiro_estrela.write("Andrew Schulz,imagens/Andrew.png,https://www.youtube.com/@OfficialFlagrant\n")
         ficheiro_estrela.write("Vilela Rogerio,imagens/vilela.png,https://www.youtube.com/@inteligencialtda\n")
@@ -349,7 +403,7 @@ def pagina_inicial(user):
     with open("humor.txt","w") as ficheiro_humor:
 
         ficheiro_humor.write("Shay Shay Club,imagens/shanonlogo.png,https://www.youtube.com/@ClubShayShay\n")
-        ficheiro_humor.write("ShxtsnGigs Podcast,imagens/sixguys.png,https://www.youtube.com/@ShtsNGigsPodcast\n")
+        ficheiro_humor.write("ShxtsnGigs Podcast,imagens/sixguys.jpg,https://www.youtube.com/@ShtsNGigsPodcast\n")
         ficheiro_humor.write("800 Pound Gorilla Media,imagens/gorrila.png,https://www.youtube.com/@800pgm/videos\n")
     
     
@@ -392,7 +446,7 @@ def pagina_inicial(user):
         ficheiro_desenvolvimento.write("The Diary of a CEO,imagens/steven.png,https://www.youtube.com/@TheDiaryOfACEO\n")
         ficheiro_desenvolvimento.write("Lex Fridman,imagens/lexfridmanphoto.png,https://www.youtube.com/results?search_query=lex+fridman\n")
         ficheiro_desenvolvimento.write("The Mindset Mentor Podcast,imagens/mindset.png,https://www.youtube.com/@mindsetmentorpodcast\n")
-        ficheiro_desenvolvimento.write("Chris Williamson,imagens/chris.png,https://www.youtube.com/@ChrisWillx\n")
+        ficheiro_desenvolvimento.write("Chris Williamson,imagens/chris.jpeg,https://www.youtube.com/@ChrisWillx\n")
 
     def browser(link):
         webbrowser.open(link)
@@ -494,7 +548,7 @@ def pagina_inicial(user):
             # Dropdown para selecionar o tipo de usuário
             tipo_usuario_dropdown = ctk.CTkOptionMenu(
                 master=form_frame,
-                values=["Admin", "User"],
+                values=["User"],
                 fg_color="#404040",
                 text_color="white",
                 corner_radius=10
@@ -535,19 +589,12 @@ def pagina_inicial(user):
         print("Usuário desconectado.")  # Aqui você pode adicionar a lógica para retornar à tela de login
 
     # Botão de logout
-    logout_btn = ctk.CTkButton(
-        master=frame_principal,
-        text="Logout",
-        fg_color="#E74C3C",
-        text_color="white",
-        corner_radius=10,
-        command=logout
-    )
+    logout_btn = ctk.CTkButton( master=frame_principal, text="Logout", fg_color="#E74C3C", text_color="white", corner_radius=10,command=logout)
     logout_btn.pack(pady=10)
 
+  
 
     main_page.mainloop()
 
 #pagina_inicial('')
-
 
