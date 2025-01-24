@@ -137,8 +137,11 @@ def criar_frame_login():
 # Função para entrar como convidado
 def entrar_como_convidado():
     messagebox.showinfo("Convidado", "Você está entrando como convidado. Algumas funcionalidades podem estar limitadas.")
-    app.destroy()
-    pagina_inicial('')
+    try:
+        app.destroy()
+        pagina_inicial('convidado')  # Alterado para um valor padrão
+    except Exception as e:
+        print(f"Erro ao entrar como convidado: {e}")
 
 
     def user_info(username):
@@ -182,4 +185,3 @@ def entrar_como_convidado():
 # Inicializa a tela de login ao abrir o app
 criar_frame_login()
 app.mainloop()
-
