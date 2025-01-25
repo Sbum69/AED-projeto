@@ -53,7 +53,7 @@ def admin_dashboard():
     admin_app = ctk.CTk()
     admin_app.title("PodSpot")
     admin_app.geometry("1024x900")
-    admin_app.resizable(False, False)
+    admin_app.resizable(True, True)
 
     # Frame principal do dashboard do admin
     frame_principal = ctk.CTkFrame(admin_app, fg_color="green")
@@ -71,6 +71,12 @@ def admin_dashboard():
     tab_podcasts = admin_tab.add("Listar Podcasts")
     tab_listar_user = admin_tab.add("Lista de utilizadores")
     tab_gerir_user = admin_tab.add("Gerir Users")
+    tab_gerir_podcast = admin_tab.add("Gerir Podcasts")
+    tab_gerir_trendings = admin_tab.add("Gerir Tendencias")
+    tab_gerir_humor = admin_tab.add("Gerir Humor")
+    tab_gerir_desenvolvimento = admin_tab.add("Gerir Desenvolvimento")
+    tab_gerir_estrelas = admin_tab.add("Gerir Estrelas")
+    tab_gerir_entretenimento = admin_tab.add("Gerir Entretenimento")
 
     # Botões no menu lateral
     ctk.CTkButton(menu_lateral, text="Lista de Podcasts", command=lambda: admin_tab.set("Listar Podcasts")).pack(
@@ -79,7 +85,19 @@ def admin_dashboard():
         pady=20, padx=10, anchor="w")
     ctk.CTkButton(menu_lateral, text="Gerir Users", command=lambda: admin_tab.set("Gerir Users")).pack(
         pady=20, padx=10, anchor="w")
-
+    ctk.CTkButton(menu_lateral,text="Gerir Podcasts",command=lambda:admin_tab.set("Gerir Podcasts")).pack(
+        pady=20,padx=10,anchor = "w")
+    ctk.CTkButton(menu_lateral,text="Gerir Trendings",command=lambda:admin_tab.set("Gerir Tendencias")).pack(
+        pady=20,padx=10,anchor = "w")
+    ctk.CTkButton(menu_lateral,text="Gerir Categoria Humor",command=lambda:admin_tab.set("Gerir Humor")).pack(
+        pady=20,padx=10,anchor="w")
+    ctk.CTkButton(menu_lateral,text="Gerir Desenvolvimento",command=lambda:admin_tab.set("Gerir Desenvolvimento")).pack(
+        pady=20,padx=10, anchor = "w")
+    ctk.CTkButton(menu_lateral,text="Gerir Estrelas",command=lambda:admin_tab.set("Gerir Estrelas")).pack(
+        pady=20,padx=10, anchor = "w")
+    ctk.CTkButton(menu_lateral,text="Gerir Entertenimento",command=lambda:admin_tab.set("Gerir Entertenimento")).pack(
+         pady=20,padx=10, anchor = "w")
+       
     # ==================
     # Tab de Podcasts
     # ==================
@@ -173,8 +191,285 @@ def admin_dashboard():
 
     ctk.CTkButton(frame_form, text="Remover Usuário", command=remover_user, fg_color="red").grid(
         row=4, column=0, columnspan=2, pady=10)
+    
+    #=============================
+    # Tab para gestão de podcasts
+    #=============================
+    
+    def carregar_podcasts():
+        podcast = []
+        try:
+            with open("podcasts.txt","r") as ficheiro:
+                return ficheiro.readlines()
+        except FileNotFoundError:
+            messagebox.showerror("Erro","O arquivo podcasts.txt não existe")
+            return []
+        
+
+    def salvar_podcasts():
+        conteudo = txtbox_gerir_podcasts.get("1.0","end").strip()
+        linhas = conteudo.split("\n")
+        try:
+            with open("podcasts.txt","w") as ficheiro:
+              for linha in linhas:
+                  ficheiro.write(f"{linha}\n")
+            messagebox.showinfo("Sucesso","Alterações salvas com sucesso!")
+        except FileNotFoundError:
+            messagebox.showerror("Erro","O arquivo podcasts.txt não existe")
+    
+    txtbox_gerir_podcasts = ctk.CTkTextbox(tab_gerir_podcast,fg_color="black",text_color="white",font=("Helvetica",14))
+    txtbox_gerir_podcasts.pack(fill="both",expand=True,padx=10)
+
+    def exibir_podcasts():
+        linhas = carregar_podcasts()
+        if linhas:
+            txtbox_gerir_podcasts.delete("1.0","end")
+            for linha in linhas:
+                partes = linha.strip().split(",")
+                if len(partes) == 3:
+                    nome = partes[0]
+                    imagem = partes[1]
+                    link = partes[2]
+                    txtbox_gerir_podcasts.insert("1.0",f"Nome:{nome}\nImagem: {imagem}\nlink: {link}\n\n")
+        else:
+            txtbox_gerir_podcasts.insert("1.0","Nenhum podcast encontrado.")
+    exibir_podcasts()
+
+       
+
+    btn_salvar_podcasts = ctk.CTkButton(tab_gerir_podcast,text="Guardar alterações",command=salvar_podcasts,fg_color="teal")
+    btn_salvar_podcasts.pack(pady=10)
+    
+    #=================================
+    # Tab para a gestão das tendencias
+    #=================================
+
+    def carregar_tendencias():
+        trendings = []
+        try:
+            with open("trending.txt","r") as ficheiro_trending:
+                return ficheiro_trending.readlines()
+        except FileNotFoundError:
+            messagebox.showerror("Erro","O trending.txt não existe")
+            return []
+    
+    def salvar_tendencias():
+        conteudo = txtbox_gerir_podcasts.get("1.0","end").strip()
+        linhas = conteudo.split("\n")
+        try:
+            with open("trending.txt","w") as ficheiro_trending:
+              for linha in linhas:
+                  ficheiro_trending.write(f"{linha}\n")
+            messagebox.showinfo("Sucesso","Alterações salvas com sucesso!")
+        except FileNotFoundError:
+            messagebox.showerror("Erro","O arquivo trending.txt não existe")
+
+    txtbox_gerir_tendencias = ctk.CTkTextbox(tab_gerir_trendings,fg_color="black",text_color="white",font=("Helvetica",14))
+    txtbox_gerir_tendencias.pack(fill="both",expand=True,padx=10)
+
+    def exibir_tendencias():
+        linhas = carregar_tendencias()
+        if linhas:
+            txtbox_gerir_tendencias.delete("1.0","end")
+            for linha in linhas:
+                partes = linha.strip().split(",")
+                if len(partes) == 3:
+                    nome = partes[0]
+                    imagem = partes[1]
+                    link = partes[2]
+                    txtbox_gerir_tendencias.insert("1.0",f"Nome:{nome}\nImagem: {imagem}\nlink: {link}\n\n")
+        else:
+            txtbox_gerir_tendencias.insert("1.0","Nenhum podcast encontrado.")
+    exibir_tendencias()
+
+    btn_salvar_tendencias = ctk.CTkButton(tab_gerir_trendings,text="Guardar alterações",command=salvar_tendencias,fg_color="teal")
+    btn_salvar_tendencias.pack(pady=10)
+
+    #==================
+    # Tab para gestão da categoria de humor
+    #==================
+
+    def carregar_humor():
+        humor = []
+        try:
+            with open("humor.txt","r") as ficheiro_humor:
+                return ficheiro_humor.readlines()
+        except FileNotFoundError:
+            messagebox.showerror("Erro","O humor.txt não existe")
+            return []
+        
+    def salvar_humor():
+        conteudo = txtbox_gerir_podcasts.get("1.0","end").strip()
+        linhas = conteudo.split("\n")
+        try:
+            with open("humor.txt","w") as ficheiro_humor:
+              for linha in linhas:
+                  ficheiro_humor.write(f"{linha}\n")
+            messagebox.showinfo("Sucesso","Alterações salvas com sucesso!")
+        except FileNotFoundError:
+            messagebox.showerror("Erro","O arquivo humor.txt não existe")
+
+    txtbox_gerir_humor = ctk.CTkTextbox(tab_gerir_humor,fg_color="black",text_color="white",font=("Helvetica",14))
+    txtbox_gerir_humor.pack(fill="both",expand=True,padx=10)
+
+    def exibir_humor():
+        linhas = carregar_humor()
+        if linhas:
+            txtbox_gerir_humor.delete("1.0","end")
+            for linha in linhas:
+                partes = linha.strip().split(",")
+                if len(partes) == 3:
+                    nome = partes[0]
+                    imagem = partes[1]
+                    link = partes[2]
+                    txtbox_gerir_humor.insert("1.0",f"Nome:{nome}\nImagem: {imagem}\nlink: {link}\n\n")
+        else:
+            txtbox_gerir_humor.insert("1.0","Nenhum podcast encontrado.")
+    exibir_humor()
+
+    btn_salvar_humor = ctk.CTkButton(tab_gerir_humor,text="Guardar alterações",command=salvar_tendencias,fg_color="teal")
+    btn_salvar_humor.pack(pady=10)
+
+
+    #==================
+    # Tab gestão de categoria de desenvolvimento
+    #==================
+
+    def carregar_desenvolvemento():
+        desenvolvimento = []
+        try:
+            with open("desenvolvimento.txt","r") as ficheiro_desenvolvimento:
+                return ficheiro_desenvolvimento.readlines()
+        except FileNotFoundError:
+            messagebox.showerror("Erro","O desenvolvimento.txt não existe")
+            return []
+    
+    def salvar_desenvolvimento():
+        conteudo = txtbox_gerir_desenvolvimento.get("1.0","end").strip()
+        linhas = conteudo.split("\n")
+        try:
+            with open("desenvolvimento.txt","w") as ficheiro_desenvolvimento:
+              for linha in linhas:
+                  ficheiro_desenvolvimento.write(f"{linha}\n")
+            messagebox.showinfo("Sucesso","Alterações salvas com sucesso!")
+        except FileNotFoundError:
+            messagebox.showerror("Erro","O arquivo desenvolvimento.txt não existe")
+    
+    txtbox_gerir_desenvolvimento = ctk.CTkTextbox(tab_gerir_desenvolvimento,fg_color="black",text_color="white",font=("Helvetica",14))
+    txtbox_gerir_desenvolvimento.pack(fill="both",expand=True,padx=10)
+
+    def exibir_desenvolvimento():
+        linhas = carregar_desenvolvemento()
+        if linhas:
+            txtbox_gerir_desenvolvimento.delete("1.0","end")
+            for linha in linhas:
+                partes = linha.strip().split(",")
+                if len(partes) == 3:
+                    nome = partes[0]
+                    imagem = partes[1]
+                    link = partes[2]
+                    txtbox_gerir_desenvolvimento.insert("1.0",f"Nome:{nome}\nImagem: {imagem}\nlink: {link}\n\n")
+        else:
+            txtbox_gerir_desenvolvimento.insert("1.0","Nenhum podcast encontrado.")
+    exibir_desenvolvimento()
+
+    btn_salvar_desenvolvimento = ctk.CTkButton(tab_gerir_desenvolvimento,text="Guardar alterações",command=salvar_desenvolvimento,fg_color="teal")
+    btn_salvar_desenvolvimento.pack(pady=10)
+
+    #=======================
+    #Tab para Gerir estrelas
+    #=======================
+
+    def carregar_estrelas():
+        estrelas = []
+        try:
+            with open("estrelas.txt","r") as ficheiro_estrelas:
+                return ficheiro_estrelas.readlines()
+        except FileNotFoundError:
+            messagebox.showerror("Erro","O estrelas.txt não existe")
+            return []
+        
+    def salvar_estrelas():
+        conteudo = txtbox_gerir_estrelas.get("1.0","end").strip()
+        linhas = conteudo.split("\n")
+        try:
+            with open("estrelas.txt","w") as ficheiro_desenvolvimento:
+              for linha in linhas:
+                  ficheiro_desenvolvimento.write(f"{linha}\n")
+            messagebox.showinfo("Sucesso","Alterações salvas com sucesso!")
+        except FileNotFoundError:
+            messagebox.showerror("Erro","O arquivo estralas.txt não existe")
+    
+    txtbox_gerir_estrelas = ctk.CTkTextbox(tab_gerir_estrelas,fg_color="black",text_color="white",font=("Helvetica",14))
+    txtbox_gerir_estrelas.pack(fill="both",expand=True,padx=10)
+
+    def exibir_estrelas():
+        linhas = carregar_estrelas()
+        if linhas:
+            txtbox_gerir_estrelas.delete("1.0","end")
+            for linha in linhas:
+                partes = linha.strip().split(",")
+                if len(partes) == 3:
+                    nome = partes[0]
+                    imagem = partes[1]
+                    link = partes[2]
+                    txtbox_gerir_estrelas.insert("1.0",f"Nome:{nome}\nImagem: {imagem}\nlink: {link}\n\n")
+        else:
+            txtbox_gerir_estrelas.insert("1.0","Nenhum podcast encontrado.")
+    exibir_estrelas()
+
+    btn_salvar_estrelas = ctk.CTkButton(tab_gerir_estrelas,text="Guardar alterações",command=salvar_estrelas,fg_color="teal")
+    btn_salvar_estrelas.pack(pady=10)
+
+        
+    #==================
+    # Tab para gerir a categoria de entertenimento
+    #==================
+
+    def carregar_entertenimento():
+        entertenimento = []
+        try:
+            with open("entertenimento.txt","r") as ficheiro_entertenimento:
+                return ficheiro_entertenimento.readlines()
+        except FileNotFoundError:
+            messagebox.showerror("Erro","O ficheiro entertenimento.txt não existe")
+            return []
+    
+    def salvar_entertenimento():
+        conteudo = txtbox_gerir_entertenimento.get("1.0","end").strip()
+        linhas = conteudo.split("\n")
+        try:
+            with open("entertenimento.txt","w") as ficheiro_entertenimento:
+              for linha in linhas:
+                  ficheiro_entertenimento.write(f"{linha}\n")
+            messagebox.showinfo("Sucesso","Alterações salvas com sucesso!")
+        except FileNotFoundError:
+            messagebox.showerror("Erro","O arquivo estralas.txt não existe")
+    
+    txtbox_gerir_entertenimento = ctk.CTkTextbox(tab_gerir_entretenimento,fg_color="black",text_color="white",font=("Helvetica",14))
+    txtbox_gerir_entertenimento.pack(fill="both",expand=True,padx=10)
+
+    def exibir_entertenimento():
+        linhas = carregar_entertenimento()
+        if linhas:
+            txtbox_gerir_entertenimento.delete("1.0","end")
+            for linha in linhas:
+                partes = linha.strip().split(",")
+                if len(partes) == 3:
+                    nome = partes[0]
+                    imagem = partes[1]
+                    link = partes[2]
+                    txtbox_gerir_entertenimento.insert("1.0",f"Nome:{nome}\nImagem: {imagem}\nlink: {link}\n\n")
+        else:
+            txtbox_gerir_entertenimento.insert("1.0","Nenhum podcast encontrado.")
+    exibir_entertenimento()
+
+    btn_salvar_entertenimento = ctk.CTkButton(tab_gerir_entretenimento,text="Guardar alterações",command=salvar_entertenimento,fg_color="teal")
+    btn_salvar_entertenimento.pack(pady=10)
+
 
     admin_app.mainloop()
+
 
 
 admin_dashboard()
