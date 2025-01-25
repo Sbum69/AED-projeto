@@ -177,7 +177,6 @@ def admin_dashboard():
     admin_app.mainloop()
 
 
-# Executar o dashboard do admin
 admin_dashboard()
 
 
