@@ -1,4 +1,0 @@
-delcio,delcio@gmail.com,12345
-dumie1,dumie1@gmail.com,54321
-dumie2,dumie2@gmail.com,78910
-dumie3,dumie3@gmail.com,10876
