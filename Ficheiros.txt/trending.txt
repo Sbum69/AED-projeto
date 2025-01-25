@@ -1,0 +1,4 @@
+Joe Rogan,imagens/joeroganlogo.png,https://www.youtube.com/results?search_query=joe+rogan
+Peweecast,imagens/peweecastlogo.png,https://www.youtube.com/@PeeWeeCast
+Shay Shay Club,imagens/shanonlogo.png,https://www.youtube.com/@ClubShayShay
+Flagrant,imagens/flagrantlogo.png,https://www.youtube.com/@OfficialFlagrant

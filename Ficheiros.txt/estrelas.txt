@@ -1,0 +1,9 @@
+Joe Rogan,imagens/joerogan.png,https://www.youtube.com/results?search_query=joe+rogan
+Lex Fridman,imagens/lexfridmanphoto.png,https://www.youtube.com/results?search_query=lex+fridman
+George Janko,imagens/georgejanko.png,https://www.youtube.com/results?search_query=george+janko
+Chris Williamson,imagens/chris.jpeg,https://www.youtube.com/@ChrisWillx
+Shanon Sharpe,imagens/shanon.png,https://www.youtube.com/@ClubShayShay
+Andrew Schulz,imagens/Andrew.png,https://www.youtube.com/@OfficialFlagrant
+Vilela Rogerio,imagens/vilela.png,https://www.youtube.com/@inteligencialtda
+Pedro Mota,imagens/pedro.png,https://www.youtube.com/results?search_query=pedro+teixeira+da+mota
+Steve Bartllet,imagens/steven.png,https://www.youtube.com/@TheDiaryOfACEO
