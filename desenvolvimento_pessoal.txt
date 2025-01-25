@@ -1,4 +1,0 @@
-The Diary of a CEO,imagens/steven.png,https://www.youtube.com/@TheDiaryOfACEO
-Lex Fridman,imagens/lexfridmanphoto.png,https://www.youtube.com/results?search_query=lex+fridman
-The Mindset Mentor Podcast,imagens/mindset.png,https://www.youtube.com/@mindsetmentorpodcast
-Chris Williamson,imagens/chris.jpeg,https://www.youtube.com/@ChrisWillx
