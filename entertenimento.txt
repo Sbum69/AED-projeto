@@ -1,4 +1,0 @@
-Joe Rogan,imagens/joeroganlogo.png,https://www.youtube.com/results?search_query=joe+rogan
-Peweecast,imagens/peweecastlogo.png,https://www.youtube.com/@PeeWeeCast
-Flagrant,imagens/flagrantlogo.png,https://www.youtube.com/@OfficialFlagrant
-Flow Podcast,imagens/flowpodcastlogo.png,https://www.youtube.com/@FlowPodcast
