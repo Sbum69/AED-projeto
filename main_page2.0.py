@@ -4,6 +4,7 @@ import customtkinter as ctk
 import webbrowser
 from tkinter import messagebox
 import glob
+
 # Função para abrir os links
 def browser(link):
     webbrowser.open(link)
@@ -48,8 +49,7 @@ with open("podcasts.txt","w") as ficheiro_podcast:
 def pagina_inicial(user):
 
 
-    # Delete after testing
-    print(user)
+   
 
 
     favoritos = []
@@ -187,7 +187,6 @@ def pagina_inicial(user):
     ficheiro_podcast = carregar_dados_podcasts("podcasts.txt")
     print(ficheiro_podcast)
 
-    # Função para pesquisar Podcasts
 
     # Loop para criar botões de podcast
     for i in range(6):
