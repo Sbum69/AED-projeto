@@ -3,6 +3,32 @@ import os
 from tkinter import messagebox
 from PIL import Image
 
+# Função para carregar os dados do arquivo admin.txt
+def carregar_dados_admin(arquivo):
+    try:
+        with open("admin.txt", "r") as file:
+            linha = file.readline().strip()  # Lê a única linha do arquivo
+            
+            # Dividir a linha pelos separadores ","
+            partes = linha.split(",")
+            
+            # Verificar se há 3 partes na linha
+            if len(partes) < 3:
+                raise ValueError("O arquivo admin.txt está mal formatado! Certifique-se de que os dados estão separados por vírgulas.")
+
+            # Retornar os valores extraídos
+            nome = partes[0].strip()  # Nome do usuário
+            email = partes[1].strip()  # Email do usuário
+            senha = partes[2].strip()  # Senha do usuário
+
+            return {"Nome": nome, "Email": email, "Password": senha}
+    except FileNotFoundError:
+        print("Arquivo admin.txt não encontrado!")
+        return {"Nome": "", "Email": "", "Password": ""}
+
+# Carregar dados do arquivo 
+dados_admin = carregar_dados_admin("admin.txt")
+
 
 # Função para carregar dados dos podcasts
 def carregar_dados_podcasts(ficheiro_podcast):
@@ -77,6 +103,7 @@ def admin_dashboard():
     tab_gerir_desenvolvimento = admin_tab.add("Gerir Desenvolvimento")
     tab_gerir_estrelas = admin_tab.add("Gerir Estrelas")
     tab_gerir_entretenimento = admin_tab.add("Gerir Entretenimento")
+    tab_perfil = admin_tab.add("Perfil")
 
     # Botões no menu lateral
     ctk.CTkButton(menu_lateral, text="Lista de Podcasts", command=lambda: admin_tab.set("Listar Podcasts")).pack(
@@ -97,6 +124,9 @@ def admin_dashboard():
         pady=20,padx=10, anchor = "w")
     ctk.CTkButton(menu_lateral,text="Gerir Entertenimento",command=lambda:admin_tab.set("Gerir Entertenimento")).pack(
          pady=20,padx=10, anchor = "w")
+    ctk.CTkButton(menu_lateral,text="Perfil de Admin",command=lambda:admin_tab.set("Perfil")).pack(
+        pady=20,padx=10,anchor ="w"
+    )
        
     # ==================
     # Tab de Podcasts
@@ -467,11 +497,103 @@ def admin_dashboard():
     btn_salvar_entertenimento = ctk.CTkButton(tab_gerir_entretenimento,text="Guardar alterações",command=salvar_entertenimento,fg_color="teal")
     btn_salvar_entertenimento.pack(pady=10)
 
+    #====================
+    # Conteudo do Perfil do adimin
+    #====================
+
+    label_admin = ctk.CTkLabel(tab_perfil,text="Admin",font=("Helvetica",28))
+    label_admin.pack(pady=20)
+
+    frame_admin = ctk.CTkFrame(master=tab_perfil,fg_color="black")
+    frame_admin.pack(fill="both",expand = True,padx=10,pady=10)
+
+     # Título
+    titulo = ctk.CTkLabel(master=frame_admin, text="Informações do Administrador",
+                          font=ctk.CTkFont(size=20, weight="bold"), text_color="white")
+    titulo.pack(pady=10)
+
+    # Frame para o formulário
+    form_frame = ctk.CTkFrame(master=frame_admin, fg_color="#282828", corner_radius=15)
+    form_frame.pack(fill="both", expand=True, padx=10, pady=10)
+
+    # Dados fictícios do admin (você pode integrar com um banco de dados depois)
+    admin_data = {
+        "Nome": dados_admin["Nome"],
+        "Password": dados_admin["Password"],
+        "Email": dados_admin["Email"]
+    }
+
+    # Função para salvar as alterações
+    def salvar_alteracoes():
+        for campo, widget in campos.items():
+            if campo == "Tipo de Usuário":
+                admin_data[campo] = tipo_usuario_dropdown.get()  # Obtém a opção selecionada
+            else:
+                admin_data[campo] = widget.get()  # Obtém o valor do campo de texto
+        print("Dados salvos:", admin_data)  # Aqui você pode substituir pela lógica de salvamento real
+        ctk.CTkMessagebox.show_info(title="Sucesso", message="Informações atualizadas com sucesso!")
+
+    # Exibição e edição dos dados do usuário
+    campos = {}
+    for idx, (campo, valor) in enumerate(admin_data.items()):
+        label = ctk.CTkLabel(master=form_frame, text=campo + ":", text_color="white", font=ctk.CTkFont(size=14))
+        label.grid(row=idx, column=0, padx=10, pady=10, sticky="e")
+
+        if campo == "Tipo de Usuário":
+            # Dropdown para selecionar o tipo de usuário
+            tipo_usuario_dropdown = ctk.CTkOptionMenu(
+                master=form_frame,
+                values=["Adiministrador"],
+                fg_color="#404040",
+                text_color="white",
+                corner_radius=10
+            )
+            tipo_usuario_dropdown.set(valor)  # Define o valor atual
+            tipo_usuario_dropdown.grid(row=idx, column=1, padx=10, pady=10, sticky="w")
+            campos[campo] = tipo_usuario_dropdown
+        else:
+            # Campo de texto para edição
+            entry = ctk.CTkEntry(
+                master=form_frame,
+                width=300,
+                fg_color="#404040",
+                text_color="white",
+                corner_radius=10
+            )
+            entry.insert(0, valor)  # Define o valor atual
+            entry.grid(row=idx, column=1, padx=10, pady=10, sticky="w")
+            campos[campo] = entry
+
+    # Botão para salvar alterações
+    salvar_btn = ctk.CTkButton(
+        master=frame_admin,
+        text="Salvar Alterações",
+        fg_color="#1DB954",
+        text_color="white",
+        corner_radius=10,
+        command=salvar_alteracoes
+    )
+    salvar_btn.pack(pady=10)
+
+    # Função de logout
+    def logout():
+        admin_dashboard.destroy()
+
+        #todo: check this
+          # Fecha a janela atual
+        print("Administrador desconectado.")  # Aqui você pode adicionar a lógica para retornar à tela de login
+
+    # Botão de logout
+    logout_btn = ctk.CTkButton( master=frame_principal, text="Logout", fg_color="#E74C3C", text_color="white", corner_radius=10,command=logout)
+    logout_btn.pack(pady=10)
+
+
+
 
     admin_app.mainloop()
 
 
-
+# Executar o dashboard do admin
 admin_dashboard()
 
 
